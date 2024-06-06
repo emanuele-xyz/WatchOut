@@ -1,4 +1,4 @@
-package watchout;
+package watchout.admin;
 
 public class AdminClient {
     public static void main(String[] args) {

@@ -1,6 +1,12 @@
-watchout/AdminServer.java
- watchout.AdminServer
 watchout/Player.java
  watchout.Player
-watchout/AdminClient.java
- watchout.AdminClient
+watchout/admin/Player.java
+ watchout.admin.Player
+watchout/admin/AdminClient.java
+ watchout.admin.AdminClient
+watchout/admin/AdminServer.java
+ watchout.admin.AdminServer
+watchout/admin/Players.java
+ watchout.admin.Players
+watchout/admin/AdminServerServices.java
+ watchout.admin.AdminServerServices
