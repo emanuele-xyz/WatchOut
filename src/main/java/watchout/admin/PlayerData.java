@@ -3,17 +3,21 @@ package watchout.admin;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class Player {
+public class PlayerData {
     private int id;
     private String address;
     private int port;
+    private int pitchStartX;
+    private int pitchStartY;
 
-    public Player() {}
+    public PlayerData() {}
 
-    public Player(int id, String address, int port) {
+    public PlayerData(int id, String address, int port, int pitchStartX, int pitchStartY) {
         this.id = id;
         this.address = address;
         this.port = port;
+        this.pitchStartX = pitchStartX;
+        this.pitchStartY = pitchStartY;
     }
 
     public int getId() {
@@ -38,5 +42,21 @@ public class Player {
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    public int getPitchStartX() {
+        return pitchStartX;
+    }
+
+    public void setPitchStartX(int pitchStartX) {
+        this.pitchStartX = pitchStartX;
+    }
+
+    public int getPitchStartY() {
+        return pitchStartY;
+    }
+
+    public void setPitchStartY(int pitchStartY) {
+        this.pitchStartY = pitchStartY;
     }
 }
