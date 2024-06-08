@@ -4,6 +4,7 @@ import watchout.Pitch;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,8 @@ public class PlayersData {
         return instance;
     }
 
-    private final List<PlayerData> playersData;
+    @XmlElement(name = "players")
+    private List<PlayerData> playersData;
 
     private PlayersData() {
         playersData = new ArrayList<>();
@@ -30,11 +32,15 @@ public class PlayersData {
         return new ArrayList<>(playersData);
     }
 
+    public synchronized void setPlayersData(List<PlayerData> playersData) {
+        this.playersData = playersData;
+    }
+
     public synchronized boolean registerPlayer(int id, String address, int port) {
         // NOTE: a player can be added only if there are no other players with the same ID
         boolean anyPlayersWithSameID = playersData.stream().anyMatch(p -> p.getId() == id);
         if (!anyPlayersWithSameID) {
-            playersData.add(new PlayerData(id, address, port, Pitch.getRandomStartingPitchCoordinate(), Pitch.getRandomStartingPitchCoordinate()));
+            playersData.add(new PlayerData(id, address, port));
             return true;
         } else {
             return false;

@@ -1,5 +1,7 @@
 package watchout.admin;
 
+import watchout.Pitch;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -18,6 +20,15 @@ public class PlayerData {
         this.port = port;
         this.pitchStartX = pitchStartX;
         this.pitchStartY = pitchStartY;
+    }
+
+    public PlayerData(int id, String address, int port) {
+        this(id, address, port, 0, 0);
+        if (Math.random() < 0.5) {
+            this.pitchStartX = Pitch.getRandomStartingPitchCoordinate();
+        } else {
+            this.pitchStartY = Pitch.getRandomStartingPitchCoordinate();
+        }
     }
 
     public int getId() {
