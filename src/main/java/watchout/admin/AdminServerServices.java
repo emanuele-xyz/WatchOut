@@ -30,6 +30,7 @@ public class AdminServerServices {
     public Response addHeartbeats(@PathParam("id") int id, @PathParam("timestamp") int timestamp, @PathParam("beats") String beats) {
         System.out.println(beats);
         // TODO: to be implemented
+        // TODO: maybe use @Consume and take an instance of Heartbeats
         return Response.ok().build();
     }
 
