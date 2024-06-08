@@ -6,9 +6,9 @@ watchout/admin/AdminClient.java
  watchout.admin.AdminClient
 watchout/Pitch.java
  watchout.Pitch
-watchout/admin/AdminServerServices.java
- watchout.admin.AdminServerServices
-watchout/admin/PlayerData.java
- watchout.admin.PlayerData
 watchout/admin/PlayersData.java
  watchout.admin.PlayersData
+watchout/admin/PlayerData.java
+ watchout.admin.PlayerData
+watchout/admin/AdminServerServices.java
+ watchout.admin.AdminServerServices

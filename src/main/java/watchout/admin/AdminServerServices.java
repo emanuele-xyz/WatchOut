@@ -22,8 +22,7 @@ public class AdminServerServices {
 
     @GET
     public Response getPlayers() {
-        // TODO: to be implemented
-        return Response.ok().build();
+        return Response.ok(PlayersData.getInstance()).build();
     }
 
     @Path("/{id}/beats/{timestamp}/{beats}")
