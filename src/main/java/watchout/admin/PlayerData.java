@@ -24,10 +24,17 @@ public class PlayerData {
 
     public PlayerData(int id, String address, int port) {
         this(id, address, port, 0, 0);
+        // NOTE: coin toss for deciding whether x or y will be "fixed"
         if (Math.random() < 0.5) {
-            this.pitchStartX = Pitch.getRandomStartingPitchCoordinate();
-        } else {
+            // NOTE: fix x
+            // NOTE: coin toss for deciding whether x should be 0 or (Pitch.Side - 1)
+            this.pitchStartX = Math.random() < 0.5 ? 0 : (Pitch.SIDE - 1);
             this.pitchStartY = Pitch.getRandomStartingPitchCoordinate();
+        } else {
+            this.pitchStartX = Pitch.getRandomStartingPitchCoordinate();
+            // NOTE: fix y
+            // NOTE: coin toss for deciding whether y should be 0 or (Pitch.Side - 1)
+            this.pitchStartY = Math.random() < 0.5 ? 0 : (Pitch.SIDE - 1);
         }
     }
 
