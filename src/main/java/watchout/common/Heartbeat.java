@@ -1,15 +1,15 @@
-package watchout.admin;
+package watchout.common;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class HeartbeatData {
+public class Heartbeat {
     private int heartbeat;
     private int timestamp;
 
-    public HeartbeatData() {}
+    public Heartbeat() {}
 
-    public HeartbeatData(int heartbeat, int timestamp) {
+    public Heartbeat(int heartbeat, int timestamp) {
         this.heartbeat = heartbeat;
         this.timestamp = timestamp;
     }

@@ -5,16 +5,16 @@ import watchout.Pitch;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class PlayerData {
+public class Player {
     private int id;
     private String address;
     private int port;
     private int pitchStartX;
     private int pitchStartY;
 
-    public PlayerData() {}
+    public Player() {}
 
-    public PlayerData(int id, String address, int port, int pitchStartX, int pitchStartY) {
+    public Player(int id, String address, int port, int pitchStartX, int pitchStartY) {
         this.id = id;
         this.address = address;
         this.port = port;
@@ -22,7 +22,7 @@ public class PlayerData {
         this.pitchStartY = pitchStartY;
     }
 
-    public PlayerData(int id, String address, int port) {
+    public Player(int id, String address, int port) {
         this(id, address, port, 0, 0);
         // NOTE: coin toss for deciding whether x or y will be "fixed"
         if (Math.random() < 0.5) {

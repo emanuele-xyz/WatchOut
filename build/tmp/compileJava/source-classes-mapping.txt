@@ -6,9 +6,21 @@ watchout/admin/AdminClient.java
  watchout.admin.AdminClient
 watchout/Pitch.java
  watchout.Pitch
-watchout/admin/PlayersData.java
- watchout.admin.PlayersData
-watchout/admin/PlayerData.java
- watchout.admin.PlayerData
-watchout/admin/AdminServerServices.java
- watchout.admin.AdminServerServices
+watchout/admin/Heartbeat.java
+ watchout.admin.Heartbeat
+watchout/admin/Player.java
+ watchout.admin.Player
+watchout/common/HeartbeatList.java
+ watchout.common.HeartbeatList
+watchout/common/Heartbeat.java
+ watchout.common.Heartbeat
+watchout/admin/PlayersServices.java
+ watchout.admin.PlayersServices
+watchout/admin/Players.java
+ watchout.admin.Players
+watchout/admin/Heartbeats.java
+ watchout.admin.Heartbeats
+watchout/common/HeartbeatStatResult.java
+ watchout.common.HeartbeatStatResult
+watchout/admin/HeartbeatsServices.java
+ watchout.admin.HeartbeatsServices
