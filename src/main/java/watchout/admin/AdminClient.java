@@ -27,17 +27,14 @@ public class AdminClient {
         System.out.println("Welcome to admin client!");
     }
 
-    private static void printSeparator() {
-        System.out.println("--------------------------------------------------------------------------------");
-    }
-
     private static void printMenu() {
-        System.out.println("Supported queries:");
+        System.out.println("Supported commands:");
         System.out.println("0: Start a game.");
         System.out.println("1: Get the list of all registered players.");
         System.out.println("2: Get the average of the last N heartbeats sent by a player.");
         System.out.println("3: Get the average of all the heartbeats between two timestamps.");
         System.out.println("4: Send a message to all players.");
+        System.out.println("m[enu]: Print this menu.");
         System.out.println("q[uit]: Quit the application.");
     }
 
@@ -72,6 +69,8 @@ public class AdminClient {
             ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
             HeartbeatStatResult result = response.getEntity(HeartbeatStatResult.class);
             System.out.println("The average of the last " + n + " heartbeats coming from player " + id + " is " + result.getResult());
+        } catch (ClientHandlerException e) {
+            System.out.println("Server not available");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -88,6 +87,8 @@ public class AdminClient {
             ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
             HeartbeatStatResult result = response.getEntity(HeartbeatStatResult.class);
             System.out.println("The average of the all the heartbeats between " + t0 + " and " + t1 + " is " + result.getResult());
+        } catch (ClientHandlerException e) {
+            System.out.println("Server not available");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -103,12 +104,9 @@ public class AdminClient {
         client = Client.create();
 
         boolean isRunning = true;
-        printSeparator();
         printWelcome();
+        printMenu();
         do {
-            printSeparator();
-            printMenu();
-            printSeparator();
             printPrompt();
             String input = keyboard.readLine().toLowerCase();
 
@@ -131,6 +129,11 @@ public class AdminClient {
                 break;
                 case "4": {
                     sendMessage();
+                }
+                break;
+                case "m":
+                case "menu": {
+                    printMenu();
                 }
                 break;
                 case "q":
