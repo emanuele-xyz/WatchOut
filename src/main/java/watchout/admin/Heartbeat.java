@@ -22,4 +22,9 @@ public class Heartbeat {
     public int getTimestamp() {
         return timestamp;
     }
+
+    @Override
+    public String toString() {
+        return "{ playerId: " + playerId + ", heartbeat: " + heartbeat + ", timestamp: " + timestamp + " }";
+    }
 }

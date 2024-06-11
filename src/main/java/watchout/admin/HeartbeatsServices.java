@@ -9,7 +9,12 @@ import javax.ws.rs.core.Response;
 @Path("heartbeats")
 public class HeartbeatsServices {
 
-    // TODO: implement heartbeats print on request
+    // NOTE: only for testing purposes
+    @GET
+    public Response printHeartbeats() {
+        Heartbeats.getInstance().printHeartbeats();
+        return Response.ok().build();
+    }
 
     @Path("/{id}/{timestamp}")
     @POST

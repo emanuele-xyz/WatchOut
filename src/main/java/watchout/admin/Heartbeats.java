@@ -21,6 +21,16 @@ public class Heartbeats {
         this.heartbeats = new ArrayList<>();
     }
 
+    public void printHeartbeats() {
+        synchronized (heartbeats) {
+            System.out.println("--------------------------------------------------------------------------------");
+            for (Heartbeat hb : heartbeats) {
+                System.out.println(hb);
+            }
+            System.out.println("--------------------------------------------------------------------------------");
+        }
+    }
+
     public void addHeartbeats(int id, int timestamp, HeartbeatList heartbeatList) {
         synchronized (heartbeats) {
             for (watchout.common.Heartbeat heartbeat : heartbeatList.getHeartbeats()) {

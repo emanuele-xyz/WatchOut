@@ -34,10 +34,13 @@ public class Players {
         this.players = players;
     }
 
+    public synchronized boolean isPlayerRegistered(int id) {
+        return players.stream().anyMatch(p -> p.getId() == id);
+    }
+
     public synchronized boolean registerPlayer(int id, String address, int port) {
-        // NOTE: a player can be added only if there are no other players with the same ID
-        boolean anyPlayersWithSameID = players.stream().anyMatch(p -> p.getId() == id);
-        if (!anyPlayersWithSameID) {
+        boolean isPlayerRegistered = isPlayerRegistered(id);
+        if (!isPlayerRegistered) {
             players.add(new Player(id, address, port));
             return true;
         } else {
