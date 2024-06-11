@@ -16,9 +16,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class AdminClient {
-    private static final String serverAddress = "http://localhost:1337";
-    private static final String playersEndpoint = serverAddress + "/players";
-    private static final String heartbeatsEndpoint = serverAddress + "/heartbeats";
+    private static final String SERVER_ADDRESS = "http://localhost:1337";
+    private static final String PLAYERS_ENDPOINT = SERVER_ADDRESS + "/players";
+    private static final String HEARTBEATS_ENDPOINT = SERVER_ADDRESS + "/heartbeats";
 
     private static BufferedReader keyboard = null;
     private static Client client = null;
@@ -33,18 +33,25 @@ public class AdminClient {
 
     private static void printMenu() {
         System.out.println("Supported queries:");
-        System.out.println("0) Get registered players.");
-        System.out.println("1) Get the average of the last N heartbeats sent by a player.");
-        System.out.println("2) Get the average of all the heartbeats between two timestamps.");
-        System.out.println("Type 'quit' to exit.");
+        System.out.println("0: Start a game.");
+        System.out.println("1: Get the list of all registered players.");
+        System.out.println("2: Get the average of the last N heartbeats sent by a player.");
+        System.out.println("3: Get the average of all the heartbeats between two timestamps.");
+        System.out.println("4: Send a message to all players.");
+        System.out.println("q[uit]: Quit the application.");
     }
 
     private static void printPrompt() {
-        System.out.print("Please enter your query or quit > ");
+        System.out.print("> ");
+    }
+
+    private static void gameStart() {
+        // TODO: to be implemented
+        System.out.println("TO BE IMPLEMENTED ...");
     }
 
     private static void getRegisteredPlayers() {
-        WebResource webResource = client.resource(playersEndpoint);
+        WebResource webResource = client.resource(PLAYERS_ENDPOINT);
         try {
             ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
             PlayerList playerList = response.getEntity(PlayerList.class);
@@ -61,7 +68,7 @@ public class AdminClient {
             String id = keyboard.readLine();
             System.out.print("N > ");
             String n = keyboard.readLine();
-            WebResource webResource = client.resource(heartbeatsEndpoint + "/avgoflastn/" + id + "/" + n);
+            WebResource webResource = client.resource(HEARTBEATS_ENDPOINT + "/avgoflastn/" + id + "/" + n);
             ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
             HeartbeatStatResult result = response.getEntity(HeartbeatStatResult.class);
             System.out.println("The average of the last " + n + " heartbeats coming from player " + id + " is " + result.getResult());
@@ -77,13 +84,18 @@ public class AdminClient {
             String t0 = keyboard.readLine();
             System.out.print("t1 > ");
             String t1 = keyboard.readLine();
-            WebResource webResource = client.resource(heartbeatsEndpoint + "/avgbetween/" + t0 + "/" + t1);
+            WebResource webResource = client.resource(HEARTBEATS_ENDPOINT + "/avgbetween/" + t0 + "/" + t1);
             ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
             HeartbeatStatResult result = response.getEntity(HeartbeatStatResult.class);
             System.out.println("The average of the all the heartbeats between " + t0 + " and " + t1 + " is " + result.getResult());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static void sendMessage() {
+        // TODO: to be implemented
+        System.out.println("TO BE IMPLEMENTED ...");
     }
 
     public static void main(String[] args) throws IOException {
@@ -93,36 +105,43 @@ public class AdminClient {
         boolean isRunning = true;
         printSeparator();
         printWelcome();
-        printSeparator();
         do {
+            printSeparator();
             printMenu();
             printSeparator();
             printPrompt();
-            String input = keyboard.readLine();
+            String input = keyboard.readLine().toLowerCase();
+
             switch (input) {
                 case "0": {
-                    getRegisteredPlayers();
-                    printSeparator();
+                    gameStart();
                 }
                 break;
                 case "1": {
-                    getAverageOfLastN();
-                    printSeparator();
+                    getRegisteredPlayers();
                 }
                 break;
                 case "2": {
-                    getAverageBetween();
-                    printSeparator();
+                    getAverageOfLastN();
                 }
                 break;
+                case "3": {
+                    getAverageBetween();
+                }
+                break;
+                case "4": {
+                    sendMessage();
+                }
+                break;
+                case "q":
                 case "quit": {
                     isRunning = false;
                 }
                 break;
                 default: {
                     System.out.println("Unknown command '" + input + "'");
-                    printSeparator();
-                } break;
+                }
+                break;
             }
         } while (isRunning);
 
