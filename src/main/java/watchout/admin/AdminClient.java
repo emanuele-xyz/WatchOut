@@ -7,6 +7,7 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import watchout.common.Heartbeat;
 import watchout.common.HeartbeatList;
+import watchout.common.HeartbeatStatResult;
 import watchout.common.PlayerList;
 
 import java.io.BufferedReader;
@@ -54,11 +55,35 @@ public class AdminClient {
     }
 
     private static void getAverageOfLastN() {
-        // TODO: to be implemented
+        try {
+            // TODO: test what happens with wrong user input
+            System.out.print("Player id > ");
+            String id = keyboard.readLine();
+            System.out.print("N > ");
+            String n = keyboard.readLine();
+            WebResource webResource = client.resource(heartbeatsEndpoint + "/avgoflastn/" + id + "/" + n);
+            ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
+            HeartbeatStatResult result = response.getEntity(HeartbeatStatResult.class);
+            System.out.println("The average of the last " + n + " heartbeats coming from player " + id + " is " + result.getResult());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static void getAverageBetween() {
-        // TODO: to be implemented
+        try {
+            // TODO: test what happens with wrong user input
+            System.out.print("t0 > ");
+            String t0 = keyboard.readLine();
+            System.out.print("t1 > ");
+            String t1 = keyboard.readLine();
+            WebResource webResource = client.resource(heartbeatsEndpoint + "/avgbetween/" + t0 + "/" + t1);
+            ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
+            HeartbeatStatResult result = response.getEntity(HeartbeatStatResult.class);
+            System.out.println("The average of the all the heartbeats between " + t0 + " and " + t1 + " is " + result.getResult());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void main(String[] args) throws IOException {
@@ -94,6 +119,10 @@ public class AdminClient {
                     isRunning = false;
                 }
                 break;
+                default: {
+                    System.out.println("Unknown command '" + input + "'");
+                    printSeparator();
+                } break;
             }
         } while (isRunning);
 
@@ -119,7 +148,6 @@ public class AdminClient {
         System.out.println(clientResponse.toString());
         User userResponse = clientResponse.getEntity(User.class);
         System.out.println("Name: " + userResponse.getName() + " Surname: " + userResponse.getSurname());*/
-
     }
 
     public static ClientResponse postRequest(Client client, String url) {
