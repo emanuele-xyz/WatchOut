@@ -24,7 +24,7 @@ watchout/common/Player.java
  watchout.common.Player
 watchout/admin/PlayersServices.java
  watchout.admin.PlayersServices
-watchout/admin/AdminClient.java
- watchout.admin.AdminClient
 watchout/common/PlayerList.java
  watchout.common.PlayerList
+watchout/admin/AdminClient.java
+ watchout.admin.AdminClient

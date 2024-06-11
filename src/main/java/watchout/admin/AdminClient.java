@@ -117,7 +117,7 @@ public class AdminClient {
         printMenu();
         do {
             printPrompt();
-            String input = keyboard.readLine().toLowerCase();
+            String input = keyboard.readLine().toLowerCase().trim();
 
             switch (input) {
                 case "0": {
