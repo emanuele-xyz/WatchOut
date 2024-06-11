@@ -27,7 +27,10 @@ public class PlayerList {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        players.forEach(p -> sb.append(p.toString()).append("\n"));
+        for (int i = 0; i < players.size(); i++) {
+            sb.append(players.get(i));
+            if (i != players.size() - 1) sb.append("\n");
+        }
         return sb.toString();
     }
 }

@@ -50,6 +50,14 @@ public class Heartbeats {
                 }
             }
         }
+
+        // NOTE: simulate long statistics computation time
+        try {
+            Thread.sleep(10 * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         return lastNHeartbeats.stream().mapToDouble(Heartbeat::getHeartbeat).average().orElse(0.0);
     }
 
@@ -63,6 +71,14 @@ public class Heartbeats {
                 }
             }
         }
+
+        // NOTE: simulate long statistics computation time
+        try {
+            Thread.sleep(10 * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         return heartbeatsBetween.stream().mapToDouble(Heartbeat::getHeartbeat).average().orElse(0.0);
     }
 }
