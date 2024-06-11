@@ -20,6 +20,8 @@ public class HeartbeatsServices {
     @POST
     @Consumes({"application/json", "application/xml"})
     public Response addHeartbeats(@PathParam("id") int id, @PathParam("timestamp") int timestamp, HeartbeatList heartbeatList) {
+        if (!Players.getInstance().isPlayerRegistered(id)) return Response.status(Response.Status.NOT_FOUND).build();
+
         Heartbeats.getInstance().addHeartbeats(id, timestamp, heartbeatList);
         return Response.ok().build();
     }
@@ -27,6 +29,9 @@ public class HeartbeatsServices {
     @Path("/avgoflastn/{id}/{n}")
     @GET
     public Response getAverageOfLastNHeartbeats(@PathParam("id") int id, @PathParam("n") int n) {
+        if (!Players.getInstance().isPlayerRegistered(id)) return Response.status(Response.Status.NOT_FOUND).build();
+        if (n < 0) return Response.status(Response.Status.BAD_REQUEST).build();
+
         double avg = Heartbeats.getInstance().getAverageOfLastNHeartbeats(id, n);
         HeartbeatStatResult result = new HeartbeatStatResult(avg);
         return Response.ok(result).build();
@@ -35,6 +40,8 @@ public class HeartbeatsServices {
     @Path("/avgbetween/{t1}/{t2}")
     @GET
     public Response getAverageOfHeartbeatsBetween(@PathParam("t1") int t1, @PathParam("t2") int t2) {
+        if (t1 > t2) return Response.status(Response.Status.BAD_REQUEST).build();
+
         double avg = Heartbeats.getInstance().getAverageOfHeartbeatsBetween(t1, t2);
         HeartbeatStatResult result = new HeartbeatStatResult(avg);
         return Response.ok(result).build();

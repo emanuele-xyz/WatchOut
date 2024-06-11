@@ -8,23 +8,23 @@ watchout/admin/AdminServer.java
  watchout.admin.AdminServer
 watchout/Pitch.java
  watchout.Pitch
-watchout/admin/Players.java
- watchout.admin.Players
+watchout/common/Player.java
+ watchout.common.Player
 watchout/admin/Heartbeat.java
  watchout.admin.Heartbeat
-watchout/admin/PlayersServices.java
- watchout.admin.PlayersServices
+watchout/common/HeartbeatStatResult.java
+ watchout.common.HeartbeatStatResult
 watchout/common/PlayerList.java
  watchout.common.PlayerList
 watchout/common/HeartbeatList.java
  watchout.common.HeartbeatList
 watchout/common/Heartbeat.java
  watchout.common.Heartbeat
-watchout/common/Player.java
- watchout.common.Player
-watchout/common/HeartbeatStatResult.java
- watchout.common.HeartbeatStatResult
-watchout/admin/HeartbeatsServices.java
- watchout.admin.HeartbeatsServices
+watchout/admin/PlayersServices.java
+ watchout.admin.PlayersServices
 watchout/admin/AdminClient.java
  watchout.admin.AdminClient
+watchout/admin/HeartbeatsServices.java
+ watchout.admin.HeartbeatsServices
+watchout/admin/Players.java
+ watchout.admin.Players

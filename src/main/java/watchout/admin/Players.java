@@ -1,7 +1,9 @@
 package watchout.admin;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Players {
     private static Players instance = null;
@@ -13,24 +15,25 @@ public class Players {
         return instance;
     }
 
+    private final Set<Integer> playerIDs;
     private final List<Player> players;
 
     private Players() {
+        this.playerIDs = new HashSet<>();
         this.players = new ArrayList<>();
     }
 
     public synchronized boolean isPlayerRegistered(int id) {
-        return players.stream().anyMatch(p -> p.getId() == id);
+        return playerIDs.contains(id);
     }
 
     public synchronized boolean registerPlayer(int id, String address, int port) {
-        boolean isPlayerRegistered = isPlayerRegistered(id);
-        if (!isPlayerRegistered) {
+        boolean isPlayerAlreadyRegistered = isPlayerRegistered(id);
+        if (!isPlayerAlreadyRegistered) {
+            playerIDs.add(id);
             players.add(new Player(id, address, port));
-            return true;
-        } else {
-            return false;
         }
+        return !isPlayerAlreadyRegistered;
     }
 
     public synchronized List<Player> getPlayers() {
