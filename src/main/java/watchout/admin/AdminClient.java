@@ -12,6 +12,7 @@ import watchout.common.HeartbeatStatResult;
 import watchout.common.PlayerList;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -65,16 +66,13 @@ public class AdminClient {
         System.out.println("q[uit]: Quit the application.");
     }
 
-    private static void printPrompt() {
-        System.out.print("> ");
-    }
-
     private static void gameStart() {
         MqttMessage message = new MqttMessage();
         message.setQos(GAME_START_QOS);
 
         try {
             mqttClient.publish(GAME_START_TOPIC, message);
+            System.out.println("Game start notification sent to all players");
         } catch (MqttException e) {
             System.out.println("Failed to publish MQTT message: " + e.getMessage() + " (" + e.getReasonCode() + ")");
         }
@@ -140,8 +138,22 @@ public class AdminClient {
     }
 
     private static void sendMessage() {
-        // TODO: to be implemented
-        System.out.println("TO BE IMPLEMENTED ...");
+        try {
+            System.out.print("Message > ");
+            String input = keyboard.readLine().trim().toLowerCase();
+
+            MqttMessage message = new MqttMessage(input.getBytes());
+            message.setQos(MESSAGE_QOS);
+
+            try {
+                mqttClient.publish(MESSAGE_TOPIC, message);
+                System.out.println("Message '" + input + "' sent to all players");
+            } catch (MqttException e) {
+                System.out.println("Failed to publish MQTT message: " + e.getMessage() + " (" + e.getReasonCode() + ")");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) throws IOException, MqttException {
@@ -156,8 +168,8 @@ public class AdminClient {
         printMenu();
         boolean isRunning = true;
         while (isRunning) {
-            printPrompt();
-            String input = keyboard.readLine().toLowerCase().trim();
+            System.out.print("> ");
+            String input = keyboard.readLine().trim().toLowerCase();
 
             switch (input) {
                 case "0": {
