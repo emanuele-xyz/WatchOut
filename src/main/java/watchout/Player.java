@@ -1,10 +1,17 @@
 package watchout;
 
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientHandlerException;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import watchout.common.PlayerList;
 
+import javax.ws.rs.core.Response;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
+import java.util.Optional;
 
 public class Player {
     private static BufferedReader keyboard = null;
@@ -42,16 +49,44 @@ public class Player {
         return true;
     }
 
-    private static void registerPlayer() {
-        restClient = Client.create();
-        // TODO: to be implemented
+    private static List<watchout.common.Player> registerPlayer() {
+        List<watchout.common.Player> out = null;
+
+        WebResource webResource = restClient.resource(adminServerPlayersEndpoint + "/" + id + "/localhost/" + port);
+        try {
+            ClientResponse response = webResource.type("application/json").post(ClientResponse.class);
+            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+                PlayerList playerList = response.getEntity(PlayerList.class);
+                Optional<watchout.common.Player> player = playerList.getPlayers().stream().filter(p -> p.getId() == id).findFirst();
+                if (player.isPresent()) {
+                    out = playerList.getPlayers();
+                    System.out.println("Player registered successfully");
+                    System.out.println("Starting at (" + player.get().getPitchStartX() + "," + player.get().getPitchStartY() + ")");
+                    System.out.println("Here is a list of already registered players:");
+                    playerList.getPlayers().forEach(p -> System.out.println("- " + p.toString()));
+                } else {
+                    System.out.println("Player registered but not found");
+                }
+            } else {
+                int statusCode = response.getStatus();
+                String statusStr = Response.Status.fromStatusCode(statusCode).toString();
+                System.out.println("Something went wrong ... " + statusStr + "(" + statusCode + ")");
+            }
+        } catch (ClientHandlerException e) {
+            System.out.println("Something went wrong ... failed to perform request");
+        }
+        
+        return out;
     }
 
     public static void main(String[] args) throws IOException {
         keyboard = new BufferedReader(new InputStreamReader(System.in));
+        restClient = Client.create();
 
         boolean isInitializationSuccessful = initializePlayer();
         if (!isInitializationSuccessful) return;
-        registerPlayer();
+        List<watchout.common.Player> players = registerPlayer();
+        if (players == null) return;
+
     }
 }
