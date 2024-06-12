@@ -7,6 +7,7 @@ import com.sun.jersey.api.client.WebResource;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import watchout.common.HeartbeatStatResult;
 import watchout.common.PlayerList;
 
@@ -21,6 +22,9 @@ public class AdminClient {
     private static final String HEARTBEATS_ENDPOINT = SERVER_ADDRESS + "/heartbeats";
     private static final String BROKER_ADDRESS = "tcp://localhost:1883";
     private static final String GAME_START_TOPIC = "game/start";
+    private static final String MESSAGE_TOPIC = "message";
+    private static final int GAME_START_QOS = 2; // TODO: do you need 2 or can we just use 1?
+    private static final int MESSAGE_QOS = 2;
 
     private static BufferedReader keyboard = null;
     private static Client restClient = null;
@@ -66,8 +70,14 @@ public class AdminClient {
     }
 
     private static void gameStart() {
-        // TODO: to be implemented
-        System.out.println("TO BE IMPLEMENTED ...");
+        MqttMessage message = new MqttMessage();
+        message.setQos(GAME_START_QOS);
+
+        try {
+            mqttClient.publish(GAME_START_TOPIC, message);
+        } catch (MqttException e) {
+            System.out.println("Failed to publish MQTT message: " + e.getMessage() + " (" + e.getReasonCode() + ")");
+        }
     }
 
     private static void getRegisteredPlayers() {
