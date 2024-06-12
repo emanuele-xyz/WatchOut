@@ -4,6 +4,9 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import watchout.common.HeartbeatStatResult;
 import watchout.common.PlayerList;
 
@@ -16,12 +19,35 @@ public class AdminClient {
     private static final String SERVER_ADDRESS = "http://localhost:1337";
     private static final String PLAYERS_ENDPOINT = SERVER_ADDRESS + "/players";
     private static final String HEARTBEATS_ENDPOINT = SERVER_ADDRESS + "/heartbeats";
+    private static final String BROKER_ADDRESS = "tcp://localhost:1883";
+    private static final String GAME_START_TOPIC = "game/start";
 
     private static BufferedReader keyboard = null;
-    private static Client client = null;
+    private static Client restClient = null;
+    private static String mqttClientId = null;
+    private static MqttClient mqttClient = null;
 
     private static void printWelcome() {
         System.out.println("Welcome to admin client!");
+    }
+
+    private static void tryToConnectToMQTTBroker() {
+        System.out.println("Trying to connect to MQTT broker ...");
+
+        String connectionErrorMsg = null;
+        try {
+            MqttConnectOptions connOpts = new MqttConnectOptions();
+            connOpts.setCleanSession(true);
+            mqttClient.connect(connOpts);
+        } catch (MqttException e) {
+            connectionErrorMsg = e.getMessage() + " (" + e.getReasonCode() + ")";
+        }
+
+        if (mqttClient.isConnected()) {
+            System.out.println("Successfully connected to MQTT broker!");
+        } else {
+            System.out.println("Failed to connect to MQTT broker: " + connectionErrorMsg);
+        }
     }
 
     private static void printMenu() {
@@ -45,7 +71,7 @@ public class AdminClient {
     }
 
     private static void getRegisteredPlayers() {
-        WebResource webResource = client.resource(PLAYERS_ENDPOINT);
+        WebResource webResource = restClient.resource(PLAYERS_ENDPOINT);
         try {
             ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
             PlayerList playerList = response.getEntity(PlayerList.class);
@@ -62,7 +88,7 @@ public class AdminClient {
             System.out.print("N > ");
             String n = keyboard.readLine();
 
-            WebResource webResource = client.resource(HEARTBEATS_ENDPOINT + "/avgoflastn/" + id + "/" + n);
+            WebResource webResource = restClient.resource(HEARTBEATS_ENDPOINT + "/avgoflastn/" + id + "/" + n);
             ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
             if (response.getStatus() != Response.Status.OK.getStatusCode()) {
                 int statusCode = response.getStatus();
@@ -86,7 +112,7 @@ public class AdminClient {
             System.out.print("t1 > ");
             String t1 = keyboard.readLine();
 
-            WebResource webResource = client.resource(HEARTBEATS_ENDPOINT + "/avgbetween/" + t0 + "/" + t1);
+            WebResource webResource = restClient.resource(HEARTBEATS_ENDPOINT + "/avgbetween/" + t0 + "/" + t1);
             ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
             if (response.getStatus() != Response.Status.OK.getStatusCode()) {
                 int statusCode = response.getStatus();
@@ -108,14 +134,18 @@ public class AdminClient {
         System.out.println("TO BE IMPLEMENTED ...");
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, MqttException {
         keyboard = new BufferedReader(new InputStreamReader(System.in));
-        client = Client.create();
+        restClient = Client.create();
+        mqttClientId = MqttClient.generateClientId();
+        mqttClient = new MqttClient(BROKER_ADDRESS, mqttClientId);
 
-        boolean isRunning = true;
         printWelcome();
+        tryToConnectToMQTTBroker();
+        if (!mqttClient.isConnected()) return;
         printMenu();
-        do {
+        boolean isRunning = true;
+        while (isRunning) {
             printPrompt();
             String input = keyboard.readLine().toLowerCase().trim();
 
@@ -155,6 +185,8 @@ public class AdminClient {
                 }
                 break;
             }
-        } while (isRunning);
+        }
+
+        mqttClient.disconnect();
     }
 }
