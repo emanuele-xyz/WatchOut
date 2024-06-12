@@ -12,7 +12,6 @@ import watchout.common.HeartbeatStatResult;
 import watchout.common.PlayerList;
 
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -34,25 +33,6 @@ public class AdminClient {
 
     private static void printWelcome() {
         System.out.println("Welcome to admin client!");
-    }
-
-    private static void tryToConnectToMQTTBroker() {
-        System.out.println("Trying to connect to MQTT broker ...");
-
-        String connectionErrorMsg = null;
-        try {
-            MqttConnectOptions connOpts = new MqttConnectOptions();
-            connOpts.setCleanSession(true);
-            mqttClient.connect(connOpts);
-        } catch (MqttException e) {
-            connectionErrorMsg = e.getMessage() + " (" + e.getReasonCode() + ")";
-        }
-
-        if (mqttClient.isConnected()) {
-            System.out.println("Successfully connected to MQTT broker!");
-        } else {
-            System.out.println("Failed to connect to MQTT broker: " + connectionErrorMsg);
-        }
     }
 
     private static void printMenu() {
@@ -89,7 +69,7 @@ public class AdminClient {
         }
     }
 
-    private static void getAverageOfLastN() {
+    private static void getAverageOfLastN() throws IOException {
         try {
             System.out.print("Player id > ");
             String id = keyboard.readLine();
@@ -108,12 +88,10 @@ public class AdminClient {
             }
         } catch (ClientHandlerException e) {
             System.out.println("Server not available");
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
-    private static void getAverageBetween() {
+    private static void getAverageBetween() throws IOException {
         try {
             System.out.print("t0 > ");
             String t0 = keyboard.readLine();
@@ -132,39 +110,49 @@ public class AdminClient {
             }
         } catch (ClientHandlerException e) {
             System.out.println("Server not available");
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
-    private static void sendMessage() {
+    private static void sendMessage() throws IOException {
+        System.out.print("Message > ");
+        String input = keyboard.readLine().trim().toLowerCase();
+
+        MqttMessage message = new MqttMessage(input.getBytes());
+        message.setQos(MESSAGE_QOS);
+
         try {
-            System.out.print("Message > ");
-            String input = keyboard.readLine().trim().toLowerCase();
-
-            MqttMessage message = new MqttMessage(input.getBytes());
-            message.setQos(MESSAGE_QOS);
-
-            try {
-                mqttClient.publish(MESSAGE_TOPIC, message);
-                System.out.println("Message '" + input + "' sent to all players");
-            } catch (MqttException e) {
-                System.out.println("Failed to publish MQTT message: " + e.getMessage() + " (" + e.getReasonCode() + ")");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            mqttClient.publish(MESSAGE_TOPIC, message);
+            System.out.println("Message '" + input + "' sent to all players");
+        } catch (MqttException e) {
+            System.out.println("Failed to publish MQTT message: " + e.getMessage() + " (" + e.getReasonCode() + ")");
         }
     }
 
-    public static void main(String[] args) throws IOException, MqttException {
+    public static void main(String[] args) throws IOException {
         keyboard = new BufferedReader(new InputStreamReader(System.in));
         restClient = Client.create();
         mqttClientId = MqttClient.generateClientId();
-        mqttClient = new MqttClient(BROKER_ADDRESS, mqttClientId);
 
         printWelcome();
-        tryToConnectToMQTTBroker();
+
+        try {
+            mqttClient = new MqttClient(BROKER_ADDRESS, mqttClientId);
+        } catch (MqttException e) {
+            System.out.println("Failed to create MQTT client: " + e.getMessage() + " (" + e.getReasonCode() + ")");
+        }
+        if (mqttClient == null) return;
+
+        System.out.println("Trying to connect to MQTT broker ...");
+        try {
+            MqttConnectOptions connOpts = new MqttConnectOptions();
+            connOpts.setCleanSession(true);
+            mqttClient.connect(connOpts);
+            System.out.println("Successfully connected to MQTT broker!");
+        } catch (MqttException e) {
+            System.out.println("Failed to connect to MQTT broker: " + e.getMessage() + " (" + e.getReasonCode() + ")");
+        }
         if (!mqttClient.isConnected()) return;
+
         printMenu();
         boolean isRunning = true;
         while (isRunning) {
@@ -209,6 +197,10 @@ public class AdminClient {
             }
         }
 
-        mqttClient.disconnect();
+        try {
+            mqttClient.disconnect();
+        } catch (MqttException e) {
+            System.out.println("Failed to disconnect from MQTT broker " + e.getMessage() + " (" + e.getReasonCode() + ")");
+        }
     }
 }
