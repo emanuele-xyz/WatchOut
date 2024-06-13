@@ -1,15 +1,43 @@
+watchout/player/PlayerPeerServiceGrpc.java
+ watchout.player.PlayerPeerServiceGrpc
+ watchout.player.PlayerPeerServiceGrpc$1
+ watchout.player.PlayerPeerServiceGrpc$MethodHandlers
+ watchout.player.PlayerPeerServiceGrpc$PlayerPeerServiceBaseDescriptorSupplier
+ watchout.player.PlayerPeerServiceGrpc$PlayerPeerServiceBlockingStub
+ watchout.player.PlayerPeerServiceGrpc$PlayerPeerServiceFileDescriptorSupplier
+ watchout.player.PlayerPeerServiceGrpc$PlayerPeerServiceFutureStub
+ watchout.player.PlayerPeerServiceGrpc$PlayerPeerServiceImplBase
+ watchout.player.PlayerPeerServiceGrpc$PlayerPeerServiceMethodDescriptorSupplier
+ watchout.player.PlayerPeerServiceGrpc$PlayerPeerServiceStub
+watchout/player/PlayerRegistry.java
+ watchout.player.PlayerRegistry
+watchout/admin/Heartbeats.java
+ watchout.admin.Heartbeats
 watchout/admin/Player.java
  watchout.admin.Player
 watchout/admin/AdminClient.java
  watchout.admin.AdminClient
-watchout/admin/Heartbeats.java
- watchout.admin.Heartbeats
+watchout/player/GreetingStreamObserver.java
+ watchout.player.GreetingStreamObserver
 watchout/admin/AdminServer.java
  watchout.admin.AdminServer
+watchout/player/PlayerPeerServiceOuterClass.java
+ watchout.player.PlayerPeerServiceOuterClass
+ watchout.player.PlayerPeerServiceOuterClass$1
+ watchout.player.PlayerPeerServiceOuterClass$Empty
+ watchout.player.PlayerPeerServiceOuterClass$Empty$1
+ watchout.player.PlayerPeerServiceOuterClass$Empty$Builder
+ watchout.player.PlayerPeerServiceOuterClass$EmptyOrBuilder
+ watchout.player.PlayerPeerServiceOuterClass$GreetingRequest
+ watchout.player.PlayerPeerServiceOuterClass$GreetingRequest$1
+ watchout.player.PlayerPeerServiceOuterClass$GreetingRequest$Builder
+ watchout.player.PlayerPeerServiceOuterClass$GreetingRequestOrBuilder
 watchout/Pitch.java
  watchout.Pitch
 watchout/admin/Players.java
  watchout.admin.Players
+watchout/player/GRPCHandle.java
+ watchout.player.GRPCHandle
 watchout/admin/Heartbeat.java
  watchout.admin.Heartbeat
 watchout/admin/PlayersServices.java
@@ -22,9 +50,11 @@ watchout/common/Heartbeat.java
  watchout.common.Heartbeat
 watchout/common/Player.java
  watchout.common.Player
-watchout/common/HeartbeatStatResult.java
- watchout.common.HeartbeatStatResult
 watchout/admin/HeartbeatsServices.java
  watchout.admin.HeartbeatsServices
-watchout/Player.java
- watchout.Player
+watchout/common/HeartbeatStatResult.java
+ watchout.common.HeartbeatStatResult
+watchout/player/PlayerPeerServiceImpl.java
+ watchout.player.PlayerPeerServiceImpl
+watchout/player/PlayerPeer.java
+ watchout.player.PlayerPeer
