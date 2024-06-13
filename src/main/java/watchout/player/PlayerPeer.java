@@ -6,6 +6,7 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import org.eclipse.paho.client.mqttv3.MqttClient;
 import watchout.common.Player;
 import watchout.common.PlayerList;
 import watchout.player.PlayerPeerServiceOuterClass.GreetingRequest;
@@ -27,6 +28,7 @@ public class PlayerPeer {
     private static Client restClient = null;
     private static int pitchStartX = 0;
     private static int pitchStartY = 0;
+    private static Server gRPCServer = null;
 
     private static boolean initializePlayer() throws IOException {
         System.out.print("ID > ");
@@ -86,6 +88,35 @@ public class PlayerPeer {
         return out;
     }
 
+    private static void getPitchStartPosition(List<Player> players) {
+        Player player = players.stream().filter(p -> p.getId() == id).findFirst().get();
+        pitchStartX = player.getPitchStartX();
+        pitchStartY = player.getPitchStartY();
+    }
+
+    private static void createAndStartPlayerPeerServiceGRPCServer() throws IOException {
+        gRPCServer = ServerBuilder.forPort(port).addService(new PlayerPeerServiceImpl()).build();
+        gRPCServer.start();
+    }
+
+    private static void registerPlayers(List<Player> players) {
+        players.stream().filter(p -> p.getId() != id).forEach(p -> PlayerRegistry.getInstance().registerPlayer(p));
+    }
+
+
+    private static void greetAlreadyRegisteredPlayers() {
+        GreetingRequest request = GreetingRequest.newBuilder()
+                .setId(id)
+                .setAddress("localhost")
+                .setPort(port)
+                .setPitchStartX(pitchStartX)
+                .setPitchStartY(pitchStartY)
+                .build();
+        PlayerRegistry.getInstance().forEachHandle((p, h) -> {
+            h.getStub().greeting(request, new GreetingStreamObserver(p.getId(), p.getAddress(), p.getPort()));
+        });
+    }
+
     public static void main(String[] args) throws IOException {
         keyboard = new BufferedReader(new InputStreamReader(System.in));
         restClient = Client.create();
@@ -94,36 +125,15 @@ public class PlayerPeer {
         if (!isInitializationSuccessful) return;
         List<Player> players = registerPlayer();
         if (players == null) return;
+        getPitchStartPosition(players);
+        createAndStartPlayerPeerServiceGRPCServer();
+        registerPlayers(players);
+        greetAlreadyRegisteredPlayers();
 
-        Server gRPCServer = ServerBuilder.forPort(port).addService(new PlayerPeerServiceImpl()).build();
-        gRPCServer.start();
-        // TODO: when do we call server.awaitTermination()?
-
-        for (Player player : players) {
-            if (player.getId() == id) {
-                pitchStartX = player.getPitchStartX();
-                pitchStartY = player.getPitchStartY();
-            } else {
-                PlayerRegistry.getInstance().registerPlayer(player);
-            }
-        }
-
-        GreetingRequest request = GreetingRequest.newBuilder()
-                .setId(id)
-                .setAddress("localhost")
-                .setPort(port)
-                .setPitchStartX(pitchStartX)
-                .setPitchStartY(pitchStartY)
-                .build();
-        PlayerRegistry.getInstance().forEachHandle((p,h) -> {
-                h.getStub().greeting(request, new GreetingStreamObserver(p.getId(), p.getAddress(), p.getPort()));
-        });
-
-        // TODO: present player to all already registered players
         // TODO: subscribe to MQTT
 
         try {
-            gRPCServer.awaitTermination();
+            gRPCServer.awaitTermination(); // TODO: when do we call server.awaitTermination()?
         } catch (InterruptedException e) {
             // TODO: how do we handle this?
             throw new RuntimeException(e);
