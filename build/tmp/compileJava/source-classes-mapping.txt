@@ -15,8 +15,8 @@ watchout/admin/Heartbeats.java
  watchout.admin.Heartbeats
 watchout/admin/Player.java
  watchout.admin.Player
-watchout/admin/AdminClient.java
- watchout.admin.AdminClient
+watchout/player/PlayerPeerServiceImpl.java
+ watchout.player.PlayerPeerServiceImpl
 watchout/player/GreetingStreamObserver.java
  watchout.player.GreetingStreamObserver
 watchout/admin/AdminServer.java
@@ -54,7 +54,11 @@ watchout/admin/HeartbeatsServices.java
  watchout.admin.HeartbeatsServices
 watchout/common/HeartbeatStatResult.java
  watchout.common.HeartbeatStatResult
-watchout/player/PlayerPeerServiceImpl.java
- watchout.player.PlayerPeerServiceImpl
+watchout/admin/AdminClient.java
+ watchout.admin.AdminClient
+watchout/MQTTConfig.java
+ watchout.MQTTConfig
 watchout/player/PlayerPeer.java
  watchout.player.PlayerPeer
+watchout/player/PlayerMQTTCallback.java
+ watchout.player.PlayerMQTTCallback

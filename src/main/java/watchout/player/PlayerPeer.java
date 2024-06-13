@@ -6,7 +6,8 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.*;
+import watchout.MQTTConfig;
 import watchout.common.Player;
 import watchout.common.PlayerList;
 import watchout.player.PlayerPeerServiceOuterClass.GreetingRequest;
@@ -29,6 +30,8 @@ public class PlayerPeer {
     private static int pitchStartX = 0;
     private static int pitchStartY = 0;
     private static Server gRPCServer = null;
+    private static String mqttClientId = null;
+    private static MqttClient mqttClient = null;
 
     private static boolean initializePlayer() throws IOException {
         System.out.print("ID > ");
@@ -117,6 +120,48 @@ public class PlayerPeer {
         });
     }
 
+    private static boolean createMQTTClient() {
+        mqttClientId = MqttClient.generateClientId();
+        try {
+            mqttClient = new MqttClient(MQTTConfig.BROKER_ADDRESS, mqttClientId);
+        } catch (MqttException e) {
+            System.out.println("Failed to create MQTT client: " + e.getMessage() + " (" + e.getReasonCode() + ")");
+        }
+        return mqttClient != null;
+    }
+
+    private static boolean connectToMQTTBroker() {
+        try {
+            MqttConnectOptions connOpts = new MqttConnectOptions();
+            connOpts.setCleanSession(true);
+            mqttClient.connect(connOpts);
+            System.out.println("Successfully connected to MQTT broker!");
+        } catch (MqttException e) {
+            System.out.println("Failed to connect to MQTT broker: " + e.getMessage() + " (" + e.getReasonCode() + ")");
+        }
+        return mqttClient.isConnected();
+    }
+
+    private static boolean subscribeToMQTTTopic(String topic, int qos) {
+        boolean isSubscribedSuccessfully = true;
+        try {
+            mqttClient.subscribe(topic, qos);
+        } catch (MqttException e) {
+            System.out.println("MQTT subscription failed " + "- topic:" + topic + " - qos:" + qos + " - " +  e.getMessage() + " (" + e.getReasonCode() + ")");
+            isSubscribedSuccessfully = false;
+        }
+        return isSubscribedSuccessfully;
+    }
+
+    private static boolean subscribeToMQTTTopics() {
+        mqttClient.setCallback(new PlayerMQTTCallback());
+
+        boolean isSubscribedSuccessfully = true;
+        isSubscribedSuccessfully &= subscribeToMQTTTopic(MQTTConfig.GAME_START_TOPIC, MQTTConfig.GAME_START_QOS);
+        isSubscribedSuccessfully &= subscribeToMQTTTopic(MQTTConfig.CUSTOM_MESSAGE_TOPIC, MQTTConfig.CUSTOM_MESSAGE_QOS);
+        return isSubscribedSuccessfully;
+    }
+
     public static void main(String[] args) throws IOException {
         keyboard = new BufferedReader(new InputStreamReader(System.in));
         restClient = Client.create();
@@ -129,8 +174,14 @@ public class PlayerPeer {
         createAndStartPlayerPeerServiceGRPCServer();
         registerPlayers(players);
         greetAlreadyRegisteredPlayers();
+        boolean isMQTTClientCreationSuccessful = createMQTTClient();
+        if (!isMQTTClientCreationSuccessful) return;
+        boolean isConnectionWithMQTTBrokerEstablished = connectToMQTTBroker();
+        if (!isConnectionWithMQTTBrokerEstablished) return;
+        boolean isSubscribedSuccessfully = subscribeToMQTTTopics();
+        if (!isSubscribedSuccessfully) return;
 
-        // TODO: subscribe to MQTT
+        // TODO: implement game start callback
 
         try {
             gRPCServer.awaitTermination(); // TODO: when do we call server.awaitTermination()?

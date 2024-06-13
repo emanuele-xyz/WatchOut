@@ -8,6 +8,7 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import watchout.MQTTConfig;
 import watchout.common.HeartbeatStatResult;
 import watchout.common.PlayerList;
 
@@ -20,11 +21,6 @@ public class AdminClient {
     private static final String SERVER_ADDRESS = "http://localhost:1337";
     private static final String PLAYERS_ENDPOINT = SERVER_ADDRESS + "/players";
     private static final String HEARTBEATS_ENDPOINT = SERVER_ADDRESS + "/heartbeats";
-    private static final String BROKER_ADDRESS = "tcp://localhost:1883";
-    private static final String GAME_START_TOPIC = "game/start";
-    private static final String MESSAGE_TOPIC = "message";
-    private static final int GAME_START_QOS = 2; // TODO: do you need 2 or can we just use 1?
-    private static final int MESSAGE_QOS = 2;
 
     private static BufferedReader keyboard = null;
     private static Client restClient = null;
@@ -48,10 +44,10 @@ public class AdminClient {
 
     private static void gameStart() {
         MqttMessage message = new MqttMessage();
-        message.setQos(GAME_START_QOS);
+        message.setQos(MQTTConfig.GAME_START_QOS);
 
         try {
-            mqttClient.publish(GAME_START_TOPIC, message);
+            mqttClient.publish(MQTTConfig.GAME_START_TOPIC, message);
             System.out.println("Game start notification sent to all players");
         } catch (MqttException e) {
             System.out.println("Failed to publish MQTT message: " + e.getMessage() + " (" + e.getReasonCode() + ")");
@@ -118,10 +114,10 @@ public class AdminClient {
         String input = keyboard.readLine().trim().toLowerCase();
 
         MqttMessage message = new MqttMessage(input.getBytes());
-        message.setQos(MESSAGE_QOS);
+        message.setQos(MQTTConfig.CUSTOM_MESSAGE_QOS);
 
         try {
-            mqttClient.publish(MESSAGE_TOPIC, message);
+            mqttClient.publish(MQTTConfig.CUSTOM_MESSAGE_TOPIC, message);
             System.out.println("Message '" + input + "' sent to all players");
         } catch (MqttException e) {
             System.out.println("Failed to publish MQTT message: " + e.getMessage() + " (" + e.getReasonCode() + ")");
@@ -136,7 +132,7 @@ public class AdminClient {
         printWelcome();
 
         try {
-            mqttClient = new MqttClient(BROKER_ADDRESS, mqttClientId);
+            mqttClient = new MqttClient(MQTTConfig.BROKER_ADDRESS, mqttClientId);
         } catch (MqttException e) {
             System.out.println("Failed to create MQTT client: " + e.getMessage() + " (" + e.getReasonCode() + ")");
         }
