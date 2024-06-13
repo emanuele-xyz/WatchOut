@@ -4,6 +4,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+import watchout.common.Player;
 import watchout.common.PlayerList;
 
 import javax.ws.rs.core.Response;
@@ -13,7 +14,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Optional;
 
-public class Player {
+public class PlayerPeer {
     private static BufferedReader keyboard = null;
     private static int id = 0;
     private static int port = 0;
@@ -49,15 +50,15 @@ public class Player {
         return true;
     }
 
-    private static List<watchout.common.Player> registerPlayer() {
-        List<watchout.common.Player> out = null;
+    private static List<Player> registerPlayer() {
+        List<Player> out = null;
 
         WebResource webResource = restClient.resource(adminServerPlayersEndpoint + "/" + id + "/localhost/" + port);
         try {
             ClientResponse response = webResource.type("application/json").post(ClientResponse.class);
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 PlayerList playerList = response.getEntity(PlayerList.class);
-                Optional<watchout.common.Player> player = playerList.getPlayers().stream().filter(p -> p.getId() == id).findFirst();
+                Optional<Player> player = playerList.getPlayers().stream().filter(p -> p.getId() == id).findFirst();
                 if (player.isPresent()) {
                     out = playerList.getPlayers();
                     System.out.println("Player registered successfully");
@@ -75,7 +76,7 @@ public class Player {
         } catch (ClientHandlerException e) {
             System.out.println("Something went wrong ... failed to perform request");
         }
-        
+
         return out;
     }
 
@@ -85,8 +86,7 @@ public class Player {
 
         boolean isInitializationSuccessful = initializePlayer();
         if (!isInitializationSuccessful) return;
-        List<watchout.common.Player> players = registerPlayer();
+        List<Player> players = registerPlayer();
         if (players == null) return;
-
     }
 }
