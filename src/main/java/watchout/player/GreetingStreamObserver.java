@@ -5,14 +5,14 @@ import watchout.player.PlayerPeerServiceOuterClass.Empty;
 
 
 public class GreetingStreamObserver implements StreamObserver<Empty> {
-    private final int playerID;
-    private final String playerAddress;
-    private final int playerPort;
+    private final int otherPlayerID;
+    private final String otherPlayerAddress;
+    private final int otherPlayerPort;
 
-    public GreetingStreamObserver(int playerID, String playerAddress, int playerPort) {
-        this.playerID = playerID;
-        this.playerAddress = playerAddress;
-        this.playerPort = playerPort;
+    public GreetingStreamObserver(int otherPlayerID, String otherPlayerAddress, int otherPlayerPort) {
+        this.otherPlayerID = otherPlayerID;
+        this.otherPlayerAddress = otherPlayerAddress;
+        this.otherPlayerPort = otherPlayerPort;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class GreetingStreamObserver implements StreamObserver<Empty> {
 
     @Override
     public void onError(Throwable throwable) {
-        System.out.println("Failed to greet player " + playerID + " on " + playerAddress + ":" + playerPort + ": " + throwable);
+        System.out.println("Failed to greet player " + otherPlayerID + " on " + otherPlayerAddress + ":" + otherPlayerPort + ": " + throwable);
     }
 
     @Override

@@ -1302,10 +1302,11 @@ public final class PlayerPeerServiceOuterClass {
       "\n\027PlayerPeerService.proto\022\017watchout.play" +
       "er\"f\n\017GreetingRequest\022\n\n\002id\030\001 \001(\005\022\017\n\007add" +
       "ress\030\002 \001(\t\022\014\n\004port\030\003 \001(\005\022\023\n\013pitchStartX\030" +
-      "\004 \001(\005\022\023\n\013pitchStartY\030\005 \001(\005\"\007\n\005Empty2Y\n\021P" +
-      "layerPeerService\022D\n\010greeting\022 .watchout." +
-      "player.GreetingRequest\032\026.watchout.player" +
-      ".Emptyb\006proto3"
+      "\004 \001(\005\022\023\n\013pitchStartY\030\005 \001(\005\"\007\n\005Empty2\225\001\n\021" +
+      "PlayerPeerService\022D\n\010greeting\022 .watchout" +
+      ".player.GreetingRequest\032\026.watchout.playe" +
+      "r.Empty\022:\n\010election\022\026.watchout.player.Em" +
+      "pty\032\026.watchout.player.Emptyb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

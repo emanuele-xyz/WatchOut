@@ -10,7 +10,6 @@ import org.eclipse.paho.client.mqttv3.*;
 import watchout.MQTTConfig;
 import watchout.common.Player;
 import watchout.common.PlayerList;
-import watchout.player.PlayerPeerServiceOuterClass.GreetingRequest;
 
 import javax.ws.rs.core.Response;
 import java.io.BufferedReader;
@@ -98,26 +97,12 @@ public class PlayerPeer {
     }
 
     private static void createAndStartPlayerPeerServiceGRPCServer() throws IOException {
-        gRPCServer = ServerBuilder.forPort(port).addService(new PlayerPeerServiceImpl()).build();
+        gRPCServer = ServerBuilder.forPort(port).addService(new PeerServiceImpl()).build();
         gRPCServer.start();
     }
 
     private static void registerPlayers(List<Player> players) {
-        players.stream().filter(p -> p.getId() != id).forEach(p -> PlayerRegistry.getInstance().registerPlayer(p));
-    }
-
-
-    private static void greetAlreadyRegisteredPlayers() {
-        GreetingRequest request = GreetingRequest.newBuilder()
-                .setId(id)
-                .setAddress("localhost")
-                .setPort(port)
-                .setPitchStartX(pitchStartX)
-                .setPitchStartY(pitchStartY)
-                .build();
-        PlayerRegistry.getInstance().forEachHandle((p, h) -> {
-            h.getStub().greeting(request, new GreetingStreamObserver(p.getId(), p.getAddress(), p.getPort()));
-        });
+        players.stream().filter(p -> p.getId() != id).forEach(p -> NetworkView.getInstance().registerPlayer(p));
     }
 
     private static boolean createMQTTClient() {
@@ -147,14 +132,14 @@ public class PlayerPeer {
         try {
             mqttClient.subscribe(topic, qos);
         } catch (MqttException e) {
-            System.out.println("MQTT subscription failed " + "- topic:" + topic + " - qos:" + qos + " - " +  e.getMessage() + " (" + e.getReasonCode() + ")");
+            System.out.println("MQTT subscription failed " + "- topic:" + topic + " - qos:" + qos + " - " + e.getMessage() + " (" + e.getReasonCode() + ")");
             isSubscribedSuccessfully = false;
         }
         return isSubscribedSuccessfully;
     }
 
     private static boolean subscribeToMQTTTopics() {
-        mqttClient.setCallback(new PlayerMQTTCallback());
+        mqttClient.setCallback(new MQTTCallback(PlayerPeer::onGameStart));
 
         boolean isSubscribedSuccessfully = true;
         isSubscribedSuccessfully &= subscribeToMQTTTopic(MQTTConfig.GAME_START_TOPIC, MQTTConfig.GAME_START_QOS);
@@ -162,7 +147,31 @@ public class PlayerPeer {
         return isSubscribedSuccessfully;
     }
 
+    private static void onGameStart() {
+        State state = StateManager.getInstance().getState();
+        switch (state) {
+            case Idle: {
+                StateManager.getInstance().holdElection(NetworkView.getInstance().getElectionCandidateIDs(id, pitchStartX, pitchStartY));
+                NetworkView.getInstance().holdElection(id, pitchStartX, pitchStartY);
+                break;
+            }
+            case HoldingElection: {
+                // NOTE: do nothing
+                break;
+            }
+            case WaitingForLeader: {
+                // NOTE: to nothing
+                break;
+            }
+            default: {
+                throw new IllegalStateException(); // NOTE: just for debugging purposes
+            }
+        }
+    }
+
     public static void main(String[] args) throws IOException {
+        StateManager.getInstance().idle();
+
         keyboard = new BufferedReader(new InputStreamReader(System.in));
         restClient = Client.create();
 
@@ -173,15 +182,13 @@ public class PlayerPeer {
         getPitchStartPosition(players);
         createAndStartPlayerPeerServiceGRPCServer();
         registerPlayers(players);
-        greetAlreadyRegisteredPlayers();
+        NetworkView.getInstance().greetAllPlayers(id, port, pitchStartX, pitchStartY);
         boolean isMQTTClientCreationSuccessful = createMQTTClient();
         if (!isMQTTClientCreationSuccessful) return;
         boolean isConnectionWithMQTTBrokerEstablished = connectToMQTTBroker();
         if (!isConnectionWithMQTTBrokerEstablished) return;
         boolean isSubscribedSuccessfully = subscribeToMQTTTopics();
         if (!isSubscribedSuccessfully) return;
-
-        // TODO: implement game start callback
 
         try {
             gRPCServer.awaitTermination(); // TODO: when do we call server.awaitTermination()?

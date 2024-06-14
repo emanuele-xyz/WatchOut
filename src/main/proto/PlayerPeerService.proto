@@ -15,4 +15,5 @@ message Empty {
 
 service PlayerPeerService {
   rpc greeting(GreetingRequest) returns (Empty);
+  rpc election(Empty) returns (Empty);
 }
