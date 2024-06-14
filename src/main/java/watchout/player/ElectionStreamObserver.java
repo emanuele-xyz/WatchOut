@@ -21,6 +21,8 @@ public class ElectionStreamObserver implements StreamObserver<Empty> {
         StateManager.getInstance().candidateIsDown(otherPlayerID);
         if (StateManager.getInstance().areAllCandidatesDown()) {
             StateManager.getInstance().leader();
+            // TODO: announce to all other players that we are the leader
+            // TODO: once we receive an ACK from all other players, we become the Seeker
         }
     }
 
