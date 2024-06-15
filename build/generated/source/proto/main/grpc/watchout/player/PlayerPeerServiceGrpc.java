@@ -89,6 +89,37 @@ public final class PlayerPeerServiceGrpc {
     return getElectionMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.LeaderMessage,
+      watchout.player.PlayerPeerServiceOuterClass.Empty> getLeaderMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "leader",
+      requestType = watchout.player.PlayerPeerServiceOuterClass.LeaderMessage.class,
+      responseType = watchout.player.PlayerPeerServiceOuterClass.Empty.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.LeaderMessage,
+      watchout.player.PlayerPeerServiceOuterClass.Empty> getLeaderMethod() {
+    io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.LeaderMessage, watchout.player.PlayerPeerServiceOuterClass.Empty> getLeaderMethod;
+    if ((getLeaderMethod = PlayerPeerServiceGrpc.getLeaderMethod) == null) {
+      synchronized (PlayerPeerServiceGrpc.class) {
+        if ((getLeaderMethod = PlayerPeerServiceGrpc.getLeaderMethod) == null) {
+          PlayerPeerServiceGrpc.getLeaderMethod = getLeaderMethod =
+              io.grpc.MethodDescriptor.<watchout.player.PlayerPeerServiceOuterClass.LeaderMessage, watchout.player.PlayerPeerServiceOuterClass.Empty>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "leader"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  watchout.player.PlayerPeerServiceOuterClass.LeaderMessage.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  watchout.player.PlayerPeerServiceOuterClass.Empty.getDefaultInstance()))
+              .setSchemaDescriptor(new PlayerPeerServiceMethodDescriptorSupplier("leader"))
+              .build();
+        }
+      }
+    }
+    return getLeaderMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -130,6 +161,13 @@ public final class PlayerPeerServiceGrpc {
       asyncUnimplementedUnaryCall(getElectionMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void leader(watchout.player.PlayerPeerServiceOuterClass.LeaderMessage request,
+        io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty> responseObserver) {
+      asyncUnimplementedUnaryCall(getLeaderMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -146,6 +184,13 @@ public final class PlayerPeerServiceGrpc {
                 watchout.player.PlayerPeerServiceOuterClass.Empty,
                 watchout.player.PlayerPeerServiceOuterClass.Empty>(
                   this, METHODID_ELECTION)))
+          .addMethod(
+            getLeaderMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                watchout.player.PlayerPeerServiceOuterClass.LeaderMessage,
+                watchout.player.PlayerPeerServiceOuterClass.Empty>(
+                  this, METHODID_LEADER)))
           .build();
     }
   }
@@ -183,6 +228,14 @@ public final class PlayerPeerServiceGrpc {
       asyncUnaryCall(
           getChannel().newCall(getElectionMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void leader(watchout.player.PlayerPeerServiceOuterClass.LeaderMessage request,
+        io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getLeaderMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -215,6 +268,13 @@ public final class PlayerPeerServiceGrpc {
     public watchout.player.PlayerPeerServiceOuterClass.Empty election(watchout.player.PlayerPeerServiceOuterClass.Empty request) {
       return blockingUnaryCall(
           getChannel(), getElectionMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public watchout.player.PlayerPeerServiceOuterClass.Empty leader(watchout.player.PlayerPeerServiceOuterClass.LeaderMessage request) {
+      return blockingUnaryCall(
+          getChannel(), getLeaderMethod(), getCallOptions(), request);
     }
   }
 
@@ -251,10 +311,19 @@ public final class PlayerPeerServiceGrpc {
       return futureUnaryCall(
           getChannel().newCall(getElectionMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<watchout.player.PlayerPeerServiceOuterClass.Empty> leader(
+        watchout.player.PlayerPeerServiceOuterClass.LeaderMessage request) {
+      return futureUnaryCall(
+          getChannel().newCall(getLeaderMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_GREETING = 0;
   private static final int METHODID_ELECTION = 1;
+  private static final int METHODID_LEADER = 2;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -279,6 +348,10 @@ public final class PlayerPeerServiceGrpc {
           break;
         case METHODID_ELECTION:
           serviceImpl.election((watchout.player.PlayerPeerServiceOuterClass.Empty) request,
+              (io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty>) responseObserver);
+          break;
+        case METHODID_LEADER:
+          serviceImpl.leader((watchout.player.PlayerPeerServiceOuterClass.LeaderMessage) request,
               (io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty>) responseObserver);
           break;
         default:
@@ -344,6 +417,7 @@ public final class PlayerPeerServiceGrpc {
               .setSchemaDescriptor(new PlayerPeerServiceFileDescriptorSupplier())
               .addMethod(getGreetingMethod())
               .addMethod(getElectionMethod())
+              .addMethod(getLeaderMethod())
               .build();
         }
       }

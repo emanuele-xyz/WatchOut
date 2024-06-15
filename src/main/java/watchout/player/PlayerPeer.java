@@ -20,23 +20,19 @@ import java.util.Optional;
 
 public class PlayerPeer {
     private static BufferedReader keyboard = null;
-    private static int id = 0;
-    private static int port = 0;
-    private static String adminServerAddress = null;
     private static String adminServerPlayersEndpoint = null;
     private static String adminServerHeartbeatsEndpoint = null;
     private static Client restClient = null;
-    private static int pitchStartX = 0;
-    private static int pitchStartY = 0;
     private static Server gRPCServer = null;
     private static String mqttClientId = null;
     private static MqttClient mqttClient = null;
 
-    private static boolean initializePlayer() throws IOException {
+    private static boolean initializeContext() throws IOException {
         System.out.print("ID > ");
         String idStr = keyboard.readLine().trim().toLowerCase();
         try {
-            id = Integer.parseInt(idStr);
+            int id = Integer.parseInt(idStr);
+            Context.getInstance().setId(id);
         } catch (NumberFormatException e) {
             System.out.println("Invalid ID '" + idStr + "'");
             return false;
@@ -45,14 +41,15 @@ public class PlayerPeer {
         System.out.print("Port > ");
         String portStr = keyboard.readLine().trim().toLowerCase();
         try {
-            port = Integer.parseInt(portStr);
+            int port = Integer.parseInt(portStr);
+            Context.getInstance().setPort(port);
         } catch (NumberFormatException e) {
             System.out.println("Invalid port '" + portStr + "'");
             return false;
         }
 
         System.out.print("Admin server address > ");
-        adminServerAddress = keyboard.readLine().trim().toLowerCase();
+        String adminServerAddress = keyboard.readLine().trim().toLowerCase();
         adminServerPlayersEndpoint = adminServerAddress + "/players";
         adminServerHeartbeatsEndpoint = adminServerAddress + "/heartbeats";
 
@@ -62,6 +59,8 @@ public class PlayerPeer {
     private static List<Player> registerPlayer() {
         List<Player> out = null;
 
+        int id = Context.getInstance().getId();
+        int port = Context.getInstance().getPort();
         WebResource webResource = restClient.resource(adminServerPlayersEndpoint + "/" + id + "/localhost/" + port);
         try {
             ClientResponse response = webResource.type("application/json").post(ClientResponse.class);
@@ -91,17 +90,20 @@ public class PlayerPeer {
     }
 
     private static void getPitchStartPosition(List<Player> players) {
+        int id = Context.getInstance().getId();
         Player player = players.stream().filter(p -> p.getId() == id).findFirst().get();
-        pitchStartX = player.getPitchStartX();
-        pitchStartY = player.getPitchStartY();
+        Context.getInstance().setPitchStartX(player.getPitchStartX());
+        Context.getInstance().setPitchStartY(player.getPitchStartY());
     }
 
     private static void createAndStartPlayerPeerServiceGRPCServer() throws IOException {
+        int port = Context.getInstance().getPort();
         gRPCServer = ServerBuilder.forPort(port).addService(new PeerServiceImpl()).build();
         gRPCServer.start();
     }
 
     private static void registerPlayers(List<Player> players) {
+        int id = Context.getInstance().getId();
         players.stream().filter(p -> p.getId() != id).forEach(p -> NetworkView.getInstance().registerPlayer(p));
     }
 
@@ -139,7 +141,7 @@ public class PlayerPeer {
     }
 
     private static boolean subscribeToMQTTTopics() {
-        mqttClient.setCallback(new MQTTCallback(PlayerPeer::onGameStart));
+        mqttClient.setCallback(new MqttHandler());
 
         boolean isSubscribedSuccessfully = true;
         isSubscribedSuccessfully &= subscribeToMQTTTopic(MQTTConfig.GAME_START_TOPIC, MQTTConfig.GAME_START_QOS);
@@ -147,42 +149,20 @@ public class PlayerPeer {
         return isSubscribedSuccessfully;
     }
 
-    private static void onGameStart() {
-        State state = StateManager.getInstance().getState();
-        switch (state) {
-            case Idle: {
-                StateManager.getInstance().holdElection(NetworkView.getInstance().getElectionCandidateIDs(id, pitchStartX, pitchStartY));
-                NetworkView.getInstance().holdElection(id, pitchStartX, pitchStartY);
-                break;
-            }
-            case HoldingElection: {
-                // NOTE: do nothing
-                break;
-            }
-            case WaitingForLeader: {
-                // NOTE: to nothing
-                break;
-            }
-            default: {
-                throw new IllegalStateException(); // NOTE: just for debugging purposes
-            }
-        }
-    }
-
     public static void main(String[] args) throws IOException {
-        StateManager.getInstance().idle();
+        StateManager.getInstance().setState(State.Idling);
 
         keyboard = new BufferedReader(new InputStreamReader(System.in));
         restClient = Client.create();
 
-        boolean isInitializationSuccessful = initializePlayer();
+        boolean isInitializationSuccessful = initializeContext();
         if (!isInitializationSuccessful) return;
         List<Player> players = registerPlayer();
         if (players == null) return;
         getPitchStartPosition(players);
         createAndStartPlayerPeerServiceGRPCServer();
         registerPlayers(players);
-        NetworkView.getInstance().greetAllPlayers(id, port, pitchStartX, pitchStartY);
+        NetworkView.getInstance().greetAllPlayers();
         boolean isMQTTClientCreationSuccessful = createMQTTClient();
         if (!isMQTTClientCreationSuccessful) return;
         boolean isConnectionWithMQTTBrokerEstablished = connectToMQTTBroker();

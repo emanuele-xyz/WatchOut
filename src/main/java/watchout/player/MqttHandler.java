@@ -5,12 +5,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import watchout.MQTTConfig;
 
-public class MQTTCallback implements MqttCallback {
-    private final Callback onGameStartCallback;
-
-    public MQTTCallback(Callback onGameStartCallback) {
-        this.onGameStartCallback = onGameStartCallback;
-    }
+public class MqttHandler implements MqttCallback {
 
     @Override
     public void connectionLost(Throwable throwable) {
@@ -21,12 +16,11 @@ public class MQTTCallback implements MqttCallback {
     public void messageArrived(String topic, MqttMessage mqttMessage) {
         switch (topic) {
             case MQTTConfig.GAME_START_TOPIC: {
-                System.out.println("Game started!");
-                onGameStartCallback.apply();
+                EventHandlers.onGameStart();
             } break;
             case MQTTConfig.CUSTOM_MESSAGE_TOPIC: {
                 String message = new String(mqttMessage.getPayload());
-                System.out.println("Received message from admin client: " + message);
+                EventHandlers.onAdminClientMessage(message);
             } break;
         }
     }

@@ -8,6 +8,10 @@ import java.util.stream.Collectors;
 
 import watchout.player.PlayerPeerServiceOuterClass.GreetingRequest;
 import watchout.player.PlayerPeerServiceOuterClass.Empty;
+import watchout.player.PlayerPeerServiceOuterClass.LeaderMessage;
+import watchout.player.responseobservers.ElectionResponseObserver;
+import watchout.player.responseobservers.GreetingResponseObserver;
+import watchout.player.responseobservers.LeaderResponseObserver;
 
 public class NetworkView {
     private static NetworkView instance = null;
@@ -39,31 +43,45 @@ public class NetworkView {
         return !isPlayerAlreadyRegistered;
     }
 
-    public synchronized List<Integer> getElectionCandidateIDs(int id, int pitchStartX, int pitchStartY) {
-        return players.stream().filter(p -> isPlayerCloserToHomeBase(id, pitchStartX, pitchStartY, p)).map(Player::getId).collect(Collectors.toList());
+    public synchronized List<Integer> getElectionCandidates() {
+        return players.stream().filter(NetworkView::isPlayerCloserToHomeBase).map(Player::getId).collect(Collectors.toList());
     }
 
-    public synchronized void greetAllPlayers(int id, int port, int pitchStartX, int pitchStartY) {
+    public synchronized void greetAllPlayers() {
+        int id = Context.getInstance().getId();
+        int port = Context.getInstance().getPort();
+        int pitchStartX = Context.getInstance().getPitchStartX();
+        int pitchStartY = Context.getInstance().getPitchStartY();
+
         GreetingRequest request = GreetingRequest.newBuilder().setId(id).setAddress("localhost").setPort(port).setPitchStartX(pitchStartX).setPitchStartY(pitchStartY).build();
-        players.forEach(p -> playerGRPCHandles.get(p.getId()).getStub().greeting(request, new GreetingStreamObserver(p.getId(), p.getAddress(), p.getPort())));
+        players.forEach(p -> playerGRPCHandles.get(p.getId()).getStub().greeting(request, new GreetingResponseObserver(p.getId(), p.getAddress(), p.getPort())));
     }
 
-    public synchronized void holdElection(int id, int pitchStartX, int pitchStartY) {
-        // TODO: to be implemented
-        Empty empty = Empty.newBuilder().build();
+    public synchronized void holdElection() {
         players.stream()
-                .filter(p -> isPlayerCloserToHomeBase(id, pitchStartX, pitchStartY, p))
-                .forEach(p -> playerGRPCHandles.get(p.getId()).getStub().election(empty, new ElectionStreamObserver(p.getId())));
+                .filter(NetworkView::isPlayerCloserToHomeBase)
+                .forEach(p -> playerGRPCHandles.get(p.getId()).getStub().election(Empty.getDefaultInstance(), new ElectionResponseObserver(p.getId())));
+    }
+
+    public synchronized void announceLeader() {
+        int id = Context.getInstance().getId();
+
+        LeaderMessage leaderMessage = LeaderMessage.newBuilder().setId(id).build();
+        players.forEach(p -> playerGRPCHandles.get(p.getId()).getStub().leader(leaderMessage, new LeaderResponseObserver(p.getId())));
     }
 
     // Is the player p closer to the home base than we are?
-    private static boolean isPlayerCloserToHomeBase(int myID, int myPitchStartX, int myPitchStartY, Player p) {
-        double myDistanceFromHomeBase = Pitch.getDistanceFromHomeBase(myPitchStartX, myPitchStartY);
+    private static boolean isPlayerCloserToHomeBase(Player p) {
+        int pitchStartX = Context.getInstance().getPitchStartX();
+        int pitchStartY = Context.getInstance().getPitchStartY();
+        int id = Context.getInstance().getId();
+
+        double myDistanceFromHomeBase = Pitch.getDistanceFromHomeBase(pitchStartX, pitchStartY);
         double otherDistanceFromHomeBase = Pitch.getDistanceFromHomeBase(p.getPitchStartX(), p.getPitchStartY());
         if (myDistanceFromHomeBase != otherDistanceFromHomeBase) {
             return myDistanceFromHomeBase < otherDistanceFromHomeBase;
         } else {
-            return myID > p.getId();
+            return id > p.getId();
         }
     }
 }
