@@ -4,20 +4,15 @@ import io.grpc.stub.StreamObserver;
 import watchout.player.PlayerPeerServiceOuterClass.Empty;
 
 public class GRPCObserverElectionResponse implements StreamObserver<Empty> {
-    private final int otherCandidate;
-
-    public GRPCObserverElectionResponse(int otherCandidate) {
-        this.otherCandidate = otherCandidate;
-    }
-
     @Override
     public void onNext(Empty empty) {
-        EventHandlers.onElectionResponse(otherCandidate);
+        // NOTE: called when a response from the server arrives
+        // NOTE: do nothing
     }
 
     @Override
     public void onError(Throwable throwable) {
-        EventHandlers.onElectionError(otherCandidate);
+        System.out.println("Failed to send election to next player: " + throwable);
     }
 
     @Override

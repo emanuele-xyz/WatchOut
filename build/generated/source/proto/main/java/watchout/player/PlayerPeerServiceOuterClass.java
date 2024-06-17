@@ -1280,6 +1280,634 @@ public final class PlayerPeerServiceOuterClass {
 
   }
 
+  public interface ElectionMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:watchout.player.ElectionMessage)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>int32 id = 1;</code>
+     * @return The id.
+     */
+    int getId();
+
+    /**
+     * <code>int32 pitchStartX = 2;</code>
+     * @return The pitchStartX.
+     */
+    int getPitchStartX();
+
+    /**
+     * <code>int32 pitchStartY = 3;</code>
+     * @return The pitchStartY.
+     */
+    int getPitchStartY();
+  }
+  /**
+   * Protobuf type {@code watchout.player.ElectionMessage}
+   */
+  public static final class ElectionMessage extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:watchout.player.ElectionMessage)
+      ElectionMessageOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use ElectionMessage.newBuilder() to construct.
+    private ElectionMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private ElectionMessage() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new ElectionMessage();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ElectionMessage(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              id_ = input.readInt32();
+              break;
+            }
+            case 16: {
+
+              pitchStartX_ = input.readInt32();
+              break;
+            }
+            case 24: {
+
+              pitchStartY_ = input.readInt32();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return watchout.player.PlayerPeerServiceOuterClass.internal_static_watchout_player_ElectionMessage_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return watchout.player.PlayerPeerServiceOuterClass.internal_static_watchout_player_ElectionMessage_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              watchout.player.PlayerPeerServiceOuterClass.ElectionMessage.class, watchout.player.PlayerPeerServiceOuterClass.ElectionMessage.Builder.class);
+    }
+
+    public static final int ID_FIELD_NUMBER = 1;
+    private int id_;
+    /**
+     * <code>int32 id = 1;</code>
+     * @return The id.
+     */
+    @java.lang.Override
+    public int getId() {
+      return id_;
+    }
+
+    public static final int PITCHSTARTX_FIELD_NUMBER = 2;
+    private int pitchStartX_;
+    /**
+     * <code>int32 pitchStartX = 2;</code>
+     * @return The pitchStartX.
+     */
+    @java.lang.Override
+    public int getPitchStartX() {
+      return pitchStartX_;
+    }
+
+    public static final int PITCHSTARTY_FIELD_NUMBER = 3;
+    private int pitchStartY_;
+    /**
+     * <code>int32 pitchStartY = 3;</code>
+     * @return The pitchStartY.
+     */
+    @java.lang.Override
+    public int getPitchStartY() {
+      return pitchStartY_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (id_ != 0) {
+        output.writeInt32(1, id_);
+      }
+      if (pitchStartX_ != 0) {
+        output.writeInt32(2, pitchStartX_);
+      }
+      if (pitchStartY_ != 0) {
+        output.writeInt32(3, pitchStartY_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (id_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, id_);
+      }
+      if (pitchStartX_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, pitchStartX_);
+      }
+      if (pitchStartY_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, pitchStartY_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof watchout.player.PlayerPeerServiceOuterClass.ElectionMessage)) {
+        return super.equals(obj);
+      }
+      watchout.player.PlayerPeerServiceOuterClass.ElectionMessage other = (watchout.player.PlayerPeerServiceOuterClass.ElectionMessage) obj;
+
+      if (getId()
+          != other.getId()) return false;
+      if (getPitchStartX()
+          != other.getPitchStartX()) return false;
+      if (getPitchStartY()
+          != other.getPitchStartY()) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + ID_FIELD_NUMBER;
+      hash = (53 * hash) + getId();
+      hash = (37 * hash) + PITCHSTARTX_FIELD_NUMBER;
+      hash = (53 * hash) + getPitchStartX();
+      hash = (37 * hash) + PITCHSTARTY_FIELD_NUMBER;
+      hash = (53 * hash) + getPitchStartY();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static watchout.player.PlayerPeerServiceOuterClass.ElectionMessage parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static watchout.player.PlayerPeerServiceOuterClass.ElectionMessage parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static watchout.player.PlayerPeerServiceOuterClass.ElectionMessage parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static watchout.player.PlayerPeerServiceOuterClass.ElectionMessage parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static watchout.player.PlayerPeerServiceOuterClass.ElectionMessage parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static watchout.player.PlayerPeerServiceOuterClass.ElectionMessage parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static watchout.player.PlayerPeerServiceOuterClass.ElectionMessage parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static watchout.player.PlayerPeerServiceOuterClass.ElectionMessage parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static watchout.player.PlayerPeerServiceOuterClass.ElectionMessage parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static watchout.player.PlayerPeerServiceOuterClass.ElectionMessage parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static watchout.player.PlayerPeerServiceOuterClass.ElectionMessage parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static watchout.player.PlayerPeerServiceOuterClass.ElectionMessage parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(watchout.player.PlayerPeerServiceOuterClass.ElectionMessage prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code watchout.player.ElectionMessage}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:watchout.player.ElectionMessage)
+        watchout.player.PlayerPeerServiceOuterClass.ElectionMessageOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return watchout.player.PlayerPeerServiceOuterClass.internal_static_watchout_player_ElectionMessage_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return watchout.player.PlayerPeerServiceOuterClass.internal_static_watchout_player_ElectionMessage_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                watchout.player.PlayerPeerServiceOuterClass.ElectionMessage.class, watchout.player.PlayerPeerServiceOuterClass.ElectionMessage.Builder.class);
+      }
+
+      // Construct using watchout.player.PlayerPeerServiceOuterClass.ElectionMessage.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        id_ = 0;
+
+        pitchStartX_ = 0;
+
+        pitchStartY_ = 0;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return watchout.player.PlayerPeerServiceOuterClass.internal_static_watchout_player_ElectionMessage_descriptor;
+      }
+
+      @java.lang.Override
+      public watchout.player.PlayerPeerServiceOuterClass.ElectionMessage getDefaultInstanceForType() {
+        return watchout.player.PlayerPeerServiceOuterClass.ElectionMessage.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public watchout.player.PlayerPeerServiceOuterClass.ElectionMessage build() {
+        watchout.player.PlayerPeerServiceOuterClass.ElectionMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public watchout.player.PlayerPeerServiceOuterClass.ElectionMessage buildPartial() {
+        watchout.player.PlayerPeerServiceOuterClass.ElectionMessage result = new watchout.player.PlayerPeerServiceOuterClass.ElectionMessage(this);
+        result.id_ = id_;
+        result.pitchStartX_ = pitchStartX_;
+        result.pitchStartY_ = pitchStartY_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof watchout.player.PlayerPeerServiceOuterClass.ElectionMessage) {
+          return mergeFrom((watchout.player.PlayerPeerServiceOuterClass.ElectionMessage)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(watchout.player.PlayerPeerServiceOuterClass.ElectionMessage other) {
+        if (other == watchout.player.PlayerPeerServiceOuterClass.ElectionMessage.getDefaultInstance()) return this;
+        if (other.getId() != 0) {
+          setId(other.getId());
+        }
+        if (other.getPitchStartX() != 0) {
+          setPitchStartX(other.getPitchStartX());
+        }
+        if (other.getPitchStartY() != 0) {
+          setPitchStartY(other.getPitchStartY());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        watchout.player.PlayerPeerServiceOuterClass.ElectionMessage parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (watchout.player.PlayerPeerServiceOuterClass.ElectionMessage) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private int id_ ;
+      /**
+       * <code>int32 id = 1;</code>
+       * @return The id.
+       */
+      @java.lang.Override
+      public int getId() {
+        return id_;
+      }
+      /**
+       * <code>int32 id = 1;</code>
+       * @param value The id to set.
+       * @return This builder for chaining.
+       */
+      public Builder setId(int value) {
+        
+        id_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 id = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearId() {
+        
+        id_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int pitchStartX_ ;
+      /**
+       * <code>int32 pitchStartX = 2;</code>
+       * @return The pitchStartX.
+       */
+      @java.lang.Override
+      public int getPitchStartX() {
+        return pitchStartX_;
+      }
+      /**
+       * <code>int32 pitchStartX = 2;</code>
+       * @param value The pitchStartX to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPitchStartX(int value) {
+        
+        pitchStartX_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 pitchStartX = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPitchStartX() {
+        
+        pitchStartX_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int pitchStartY_ ;
+      /**
+       * <code>int32 pitchStartY = 3;</code>
+       * @return The pitchStartY.
+       */
+      @java.lang.Override
+      public int getPitchStartY() {
+        return pitchStartY_;
+      }
+      /**
+       * <code>int32 pitchStartY = 3;</code>
+       * @param value The pitchStartY to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPitchStartY(int value) {
+        
+        pitchStartY_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 pitchStartY = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPitchStartY() {
+        
+        pitchStartY_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:watchout.player.ElectionMessage)
+    }
+
+    // @@protoc_insertion_point(class_scope:watchout.player.ElectionMessage)
+    private static final watchout.player.PlayerPeerServiceOuterClass.ElectionMessage DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new watchout.player.PlayerPeerServiceOuterClass.ElectionMessage();
+    }
+
+    public static watchout.player.PlayerPeerServiceOuterClass.ElectionMessage getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<ElectionMessage>
+        PARSER = new com.google.protobuf.AbstractParser<ElectionMessage>() {
+      @java.lang.Override
+      public ElectionMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ElectionMessage(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<ElectionMessage> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ElectionMessage> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public watchout.player.PlayerPeerServiceOuterClass.ElectionMessage getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface LeaderMessageOrBuilder extends
       // @@protoc_insertion_point(interface_extends:watchout.player.LeaderMessage)
       com.google.protobuf.MessageOrBuilder {
@@ -1779,6 +2407,11 @@ public final class PlayerPeerServiceOuterClass {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_watchout_player_Empty_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_watchout_player_ElectionMessage_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_watchout_player_ElectionMessage_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_watchout_player_LeaderMessage_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -1795,14 +2428,16 @@ public final class PlayerPeerServiceOuterClass {
       "\n\027PlayerPeerService.proto\022\017watchout.play" +
       "er\"f\n\017GreetingRequest\022\n\n\002id\030\001 \001(\005\022\017\n\007add" +
       "ress\030\002 \001(\t\022\014\n\004port\030\003 \001(\005\022\023\n\013pitchStartX\030" +
-      "\004 \001(\005\022\023\n\013pitchStartY\030\005 \001(\005\"\007\n\005Empty\"\033\n\rL" +
-      "eaderMessage\022\n\n\002id\030\001 \001(\0052\327\001\n\021PlayerPeerS" +
-      "ervice\022D\n\010greeting\022 .watchout.player.Gre" +
-      "etingRequest\032\026.watchout.player.Empty\022:\n\010" +
-      "election\022\026.watchout.player.Empty\032\026.watch" +
-      "out.player.Empty\022@\n\006leader\022\036.watchout.pl" +
-      "ayer.LeaderMessage\032\026.watchout.player.Emp" +
-      "tyb\006proto3"
+      "\004 \001(\005\022\023\n\013pitchStartY\030\005 \001(\005\"\007\n\005Empty\"G\n\017E" +
+      "lectionMessage\022\n\n\002id\030\001 \001(\005\022\023\n\013pitchStart" +
+      "X\030\002 \001(\005\022\023\n\013pitchStartY\030\003 \001(\005\"\033\n\rLeaderMe" +
+      "ssage\022\n\n\002id\030\001 \001(\0052\341\001\n\021PlayerPeerService\022" +
+      "D\n\010greeting\022 .watchout.player.GreetingRe" +
+      "quest\032\026.watchout.player.Empty\022D\n\010electio" +
+      "n\022 .watchout.player.ElectionMessage\032\026.wa" +
+      "tchout.player.Empty\022@\n\006leader\022\036.watchout" +
+      ".player.LeaderMessage\032\026.watchout.player." +
+      "Emptyb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -1820,8 +2455,14 @@ public final class PlayerPeerServiceOuterClass {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_watchout_player_Empty_descriptor,
         new java.lang.String[] { });
-    internal_static_watchout_player_LeaderMessage_descriptor =
+    internal_static_watchout_player_ElectionMessage_descriptor =
       getDescriptor().getMessageTypes().get(2);
+    internal_static_watchout_player_ElectionMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_watchout_player_ElectionMessage_descriptor,
+        new java.lang.String[] { "Id", "PitchStartX", "PitchStartY", });
+    internal_static_watchout_player_LeaderMessage_descriptor =
+      getDescriptor().getMessageTypes().get(3);
     internal_static_watchout_player_LeaderMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_watchout_player_LeaderMessage_descriptor,

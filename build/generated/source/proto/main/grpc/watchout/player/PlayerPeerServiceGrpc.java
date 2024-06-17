@@ -58,27 +58,27 @@ public final class PlayerPeerServiceGrpc {
     return getGreetingMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.Empty,
+  private static volatile io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.ElectionMessage,
       watchout.player.PlayerPeerServiceOuterClass.Empty> getElectionMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "election",
-      requestType = watchout.player.PlayerPeerServiceOuterClass.Empty.class,
+      requestType = watchout.player.PlayerPeerServiceOuterClass.ElectionMessage.class,
       responseType = watchout.player.PlayerPeerServiceOuterClass.Empty.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.Empty,
+  public static io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.ElectionMessage,
       watchout.player.PlayerPeerServiceOuterClass.Empty> getElectionMethod() {
-    io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.Empty, watchout.player.PlayerPeerServiceOuterClass.Empty> getElectionMethod;
+    io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.ElectionMessage, watchout.player.PlayerPeerServiceOuterClass.Empty> getElectionMethod;
     if ((getElectionMethod = PlayerPeerServiceGrpc.getElectionMethod) == null) {
       synchronized (PlayerPeerServiceGrpc.class) {
         if ((getElectionMethod = PlayerPeerServiceGrpc.getElectionMethod) == null) {
           PlayerPeerServiceGrpc.getElectionMethod = getElectionMethod =
-              io.grpc.MethodDescriptor.<watchout.player.PlayerPeerServiceOuterClass.Empty, watchout.player.PlayerPeerServiceOuterClass.Empty>newBuilder()
+              io.grpc.MethodDescriptor.<watchout.player.PlayerPeerServiceOuterClass.ElectionMessage, watchout.player.PlayerPeerServiceOuterClass.Empty>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "election"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  watchout.player.PlayerPeerServiceOuterClass.Empty.getDefaultInstance()))
+                  watchout.player.PlayerPeerServiceOuterClass.ElectionMessage.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   watchout.player.PlayerPeerServiceOuterClass.Empty.getDefaultInstance()))
               .setSchemaDescriptor(new PlayerPeerServiceMethodDescriptorSupplier("election"))
@@ -156,7 +156,7 @@ public final class PlayerPeerServiceGrpc {
 
     /**
      */
-    public void election(watchout.player.PlayerPeerServiceOuterClass.Empty request,
+    public void election(watchout.player.PlayerPeerServiceOuterClass.ElectionMessage request,
         io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty> responseObserver) {
       asyncUnimplementedUnaryCall(getElectionMethod(), responseObserver);
     }
@@ -181,7 +181,7 @@ public final class PlayerPeerServiceGrpc {
             getElectionMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                watchout.player.PlayerPeerServiceOuterClass.Empty,
+                watchout.player.PlayerPeerServiceOuterClass.ElectionMessage,
                 watchout.player.PlayerPeerServiceOuterClass.Empty>(
                   this, METHODID_ELECTION)))
           .addMethod(
@@ -223,7 +223,7 @@ public final class PlayerPeerServiceGrpc {
 
     /**
      */
-    public void election(watchout.player.PlayerPeerServiceOuterClass.Empty request,
+    public void election(watchout.player.PlayerPeerServiceOuterClass.ElectionMessage request,
         io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getElectionMethod(), getCallOptions()), request, responseObserver);
@@ -265,7 +265,7 @@ public final class PlayerPeerServiceGrpc {
 
     /**
      */
-    public watchout.player.PlayerPeerServiceOuterClass.Empty election(watchout.player.PlayerPeerServiceOuterClass.Empty request) {
+    public watchout.player.PlayerPeerServiceOuterClass.Empty election(watchout.player.PlayerPeerServiceOuterClass.ElectionMessage request) {
       return blockingUnaryCall(
           getChannel(), getElectionMethod(), getCallOptions(), request);
     }
@@ -307,7 +307,7 @@ public final class PlayerPeerServiceGrpc {
     /**
      */
     public com.google.common.util.concurrent.ListenableFuture<watchout.player.PlayerPeerServiceOuterClass.Empty> election(
-        watchout.player.PlayerPeerServiceOuterClass.Empty request) {
+        watchout.player.PlayerPeerServiceOuterClass.ElectionMessage request) {
       return futureUnaryCall(
           getChannel().newCall(getElectionMethod(), getCallOptions()), request);
     }
@@ -347,7 +347,7 @@ public final class PlayerPeerServiceGrpc {
               (io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty>) responseObserver);
           break;
         case METHODID_ELECTION:
-          serviceImpl.election((watchout.player.PlayerPeerServiceOuterClass.Empty) request,
+          serviceImpl.election((watchout.player.PlayerPeerServiceOuterClass.ElectionMessage) request,
               (io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty>) responseObserver);
           break;
         case METHODID_LEADER:

@@ -5,28 +5,38 @@ import watchout.player.PlayerPeerServiceGrpc.PlayerPeerServiceImplBase;
 import watchout.player.PlayerPeerServiceOuterClass.GreetingRequest;
 import watchout.player.PlayerPeerServiceOuterClass.Empty;
 import watchout.player.PlayerPeerServiceOuterClass.LeaderMessage;
+import watchout.player.PlayerPeerServiceOuterClass.ElectionMessage;
 
 public class GRPCServiceImpl extends PlayerPeerServiceImplBase {
     @Override
     public void greeting(GreetingRequest request, StreamObserver<Empty> responseObserver) {
-        EventHandlers.onGreeting(request.getId(), request.getAddress(), request.getPort(), request.getPitchStartX(), request.getPitchStartY());
-        responseObserver.onNext(Empty.getDefaultInstance());
-        responseObserver.onCompleted();
+        io.grpc.Context newContext = io.grpc.Context.current().fork();
+        io.grpc.Context oldContext = newContext.attach();
+        try {
+            Context.getInstance().onGreetingReceive(request);
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+        } finally {
+            newContext.detach(oldContext);
+        }
     }
 
     @Override
-    public void election(Empty request, StreamObserver<Empty> responseObserver) {
-        // TODO: to be modified
-        EventHandlers.onElection();
-        responseObserver.onNext(Empty.getDefaultInstance());
-        responseObserver.onCompleted();
+    public void election(ElectionMessage request, StreamObserver<Empty> responseObserver) {
+        io.grpc.Context newContext = io.grpc.Context.current().fork();
+        io.grpc.Context oldContext = newContext.attach();
+        try {
+            Context.getInstance().onElectionReceive(request);
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+        } finally {
+            newContext.detach(oldContext);
+        }
     }
 
     @Override
     public void leader(LeaderMessage request, StreamObserver<Empty> responseObserver) {
-        // TODO: to be modified
-        int leader = request.getId();
-        EventHandlers.onLeader(leader);
+        // TODO: to be implemented
         responseObserver.onNext(Empty.getDefaultInstance());
         responseObserver.onCompleted();
     }

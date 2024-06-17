@@ -65,6 +65,7 @@ public class PlayerPeer {
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 PlayerList playerList = response.getEntity(PlayerList.class);
                 Player player = playerList.getPlayers().stream().filter(p -> p.getId() == id).findFirst().get();
+                System.out.println("Player starting at (" + player.getPitchStartX() + ", " + player.getPitchStartY() + ")");
                 Context.getInstance().setPitchStart(player.getPitchStartX(), player.getPitchStartY());
                 Context.getInstance().setPlayers(playerList.getPlayers());
             } else {

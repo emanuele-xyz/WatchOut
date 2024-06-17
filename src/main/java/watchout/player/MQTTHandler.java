@@ -16,11 +16,11 @@ public class MQTTHandler implements MqttCallback {
     public void messageArrived(String topic, MqttMessage mqttMessage) {
         switch (topic) {
             case MQTTConfig.GAME_START_TOPIC: {
-                EventHandlers.onGameStart();
+                Context.getInstance().onGameStartReceive();
             } break;
             case MQTTConfig.CUSTOM_MESSAGE_TOPIC: {
                 String message = new String(mqttMessage.getPayload());
-                EventHandlers.onAdminClientMessage(message);
+                System.out.println("Received message from admin client: " + message);
             } break;
         }
     }

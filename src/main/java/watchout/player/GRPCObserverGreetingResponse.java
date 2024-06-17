@@ -23,7 +23,6 @@ public class GRPCObserverGreetingResponse implements StreamObserver<Empty> {
 
     @Override
     public void onError(Throwable throwable) {
-        // TODO: onGreetingError
         System.out.println("Failed to greet player " + otherPlayerID + " on " + otherPlayerAddress + ":" + otherPlayerPort + ": " + throwable);
     }
 

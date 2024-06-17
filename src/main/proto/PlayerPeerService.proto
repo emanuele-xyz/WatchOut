@@ -13,12 +13,18 @@ message Empty {
 
 }
 
+message ElectionMessage {
+  int32 id = 1;
+  int32 pitchStartX = 2;
+  int32 pitchStartY = 3;
+}
+
 message LeaderMessage {
   int32 id = 1;
 }
 
 service PlayerPeerService {
   rpc greeting(GreetingRequest) returns (Empty);
-  rpc election(Empty) returns (Empty);
+  rpc election(ElectionMessage) returns (Empty);
   rpc leader(LeaderMessage) returns (Empty);
 }
