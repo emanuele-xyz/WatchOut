@@ -24,6 +24,10 @@ public class Player {
         this(player.getId(), player.getAddress(), player.getPort(), player.getPitchStartX(), player.getPitchStartY());
     }
 
+    public Player(Player other) {
+        this(other.id, other.address, other.port, other.pitchStartX, other.pitchStartY);
+    }
+
     public int getId() {
         return id;
     }

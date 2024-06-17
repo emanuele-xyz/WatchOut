@@ -2,8 +2,6 @@ package watchout.player;
 
 import watchout.common.Player;
 
-import java.util.List;
-
 public class EventHandlers {
     public static void onGreeting(int id, String address, int port, int pitchStartX, int pitchStartY) {
         System.out.println(
@@ -19,68 +17,32 @@ public class EventHandlers {
     }
 
     public static void onGameStart() {
-        State state = StateManager.getInstance().getState();
-        switch (state) {
-            case Idling: {
-                onElection();
-            }
-            case Electing:
-            case Playing: {
-                break;
-            }
-            default: {
-                throw new IllegalStateException();
-            }
-        }
+        // TODO: to be implemented
+        System.out.println("game start notification received");
     }
 
     public static void onElection() {
-        State state = StateManager.getInstance().getState();
-        switch (state) {
-            case Idling: {
-                System.out.println("Leader election started");
-                StateManager.getInstance().setState(State.Electing);
-                List<Integer> candidates = NetworkView.getInstance().getElectionCandidates();
-                if (!candidates.isEmpty()) {
-                    ElectionManager.startElection(candidates);
-                    NetworkView.getInstance().holdElection();
-                } else {
-                    System.out.println("I'm the leader");
-                    NetworkView.getInstance().announceLeader();
-                }
-            }
-            case Electing:
-            case Playing: {
-                break;
-            }
-            default: {
-                throw new IllegalStateException();
-            }
-        }
+        // TODO: to be implemented
+        System.out.println("election message received");
     }
 
     public static void onElectionResponse(int otherCandidate) {
         // TODO: to be implemented
+        System.out.println("election response sent");
     }
 
-    // TODO: to be implemented
     public static void onElectionError(int otherCandidate) {
-        ElectionManager.getInstance().removeCandidate(otherCandidate);
-        boolean thereAreBetterCandidates = ElectionManager.getInstance().areThereBetterCandidates();
-        if (!thereAreBetterCandidates) {
-            System.out.println("I'm the leader");
-            NetworkView.getInstance().announceLeader();
-        }
+        // TODO: to be implemented
+        System.out.println("election error");
     }
 
     public static void onLeader(int leader) {
-        System.out.println("Elected leader is " + leader);
-        // TODO: save leader
-        // TODO: start playing
+        // TODO: to be implemented
+        System.out.println("leader message received");
     }
 
     public static void onLeaderResponse(int otherCandidate) {
         // TODO: to be implemented
-        // TODO: once all other players have ACKed back. We know we are the leader and we are starting the game.
+        System.out.println("leader response sent");
     }
 }

@@ -1,15 +1,15 @@
-package watchout.player.responseobservers;
+package watchout.player;
 
 import io.grpc.stub.StreamObserver;
 import watchout.player.PlayerPeerServiceOuterClass.Empty;
 
 
-public class GreetingResponseObserver implements StreamObserver<Empty> {
+public class GRPCObserverGreetingResponse implements StreamObserver<Empty> {
     private final int otherPlayerID;
     private final String otherPlayerAddress;
     private final int otherPlayerPort;
 
-    public GreetingResponseObserver(int otherPlayerID, String otherPlayerAddress, int otherPlayerPort) {
+    public GRPCObserverGreetingResponse(int otherPlayerID, String otherPlayerAddress, int otherPlayerPort) {
         this.otherPlayerID = otherPlayerID;
         this.otherPlayerAddress = otherPlayerAddress;
         this.otherPlayerPort = otherPlayerPort;

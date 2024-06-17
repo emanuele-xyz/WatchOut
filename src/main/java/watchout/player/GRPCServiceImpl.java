@@ -6,7 +6,7 @@ import watchout.player.PlayerPeerServiceOuterClass.GreetingRequest;
 import watchout.player.PlayerPeerServiceOuterClass.Empty;
 import watchout.player.PlayerPeerServiceOuterClass.LeaderMessage;
 
-public class PeerServiceImpl extends PlayerPeerServiceImplBase {
+public class GRPCServiceImpl extends PlayerPeerServiceImplBase {
     @Override
     public void greeting(GreetingRequest request, StreamObserver<Empty> responseObserver) {
         EventHandlers.onGreeting(request.getId(), request.getAddress(), request.getPort(), request.getPitchStartX(), request.getPitchStartY());
@@ -16,6 +16,7 @@ public class PeerServiceImpl extends PlayerPeerServiceImplBase {
 
     @Override
     public void election(Empty request, StreamObserver<Empty> responseObserver) {
+        // TODO: to be modified
         EventHandlers.onElection();
         responseObserver.onNext(Empty.getDefaultInstance());
         responseObserver.onCompleted();
@@ -23,6 +24,7 @@ public class PeerServiceImpl extends PlayerPeerServiceImplBase {
 
     @Override
     public void leader(LeaderMessage request, StreamObserver<Empty> responseObserver) {
+        // TODO: to be modified
         int leader = request.getId();
         EventHandlers.onLeader(leader);
         responseObserver.onNext(Empty.getDefaultInstance());

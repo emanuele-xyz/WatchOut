@@ -15,8 +15,6 @@ import javax.ws.rs.core.Response;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
-import java.util.Optional;
 
 public class PlayerPeer {
     private static BufferedReader keyboard = null;
@@ -56,8 +54,8 @@ public class PlayerPeer {
         return true;
     }
 
-    private static List<Player> registerPlayer() {
-        List<Player> out = null;
+    private static boolean handlePlayerAdminServerRegistration() {
+        boolean success = true;
 
         int id = Context.getInstance().getId();
         int port = Context.getInstance().getPort();
@@ -66,45 +64,28 @@ public class PlayerPeer {
             ClientResponse response = webResource.type("application/json").post(ClientResponse.class);
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 PlayerList playerList = response.getEntity(PlayerList.class);
-                Optional<Player> player = playerList.getPlayers().stream().filter(p -> p.getId() == id).findFirst();
-                if (player.isPresent()) {
-                    out = playerList.getPlayers();
-                    System.out.println("Player registered successfully");
-                    System.out.println("Starting at (" + player.get().getPitchStartX() + "," + player.get().getPitchStartY() + ")");
-                    System.out.println("Here is a list of already registered players:");
-                    playerList.getPlayers().forEach(p -> System.out.println("- " + p.toString()));
-                } else {
-                    System.out.println("Player registered but not found");
-                }
+                Player player = playerList.getPlayers().stream().filter(p -> p.getId() == id).findFirst().get();
+                Context.getInstance().setPitchStart(player.getPitchStartX(), player.getPitchStartY());
+                Context.getInstance().setPlayers(playerList.getPlayers());
             } else {
+                success = false;
                 int statusCode = response.getStatus();
                 String statusStr = Response.Status.fromStatusCode(statusCode).toString();
-                System.out.println("Something went wrong ... " + statusStr + "(" + statusCode + ")");
+                System.out.println("Failed to register player to the admin server ... " + statusStr + "(" + statusCode + ")");
             }
         } catch (ClientHandlerException e) {
-            System.out.println("Something went wrong ... failed to perform request");
+            success = false;
+            System.out.println("Failed to register player to the admin server ... failed to perform request");
             System.out.println(e);
         }
 
-        return out;
-    }
-
-    private static void getPitchStartPosition(List<Player> players) {
-        int id = Context.getInstance().getId();
-        Player player = players.stream().filter(p -> p.getId() == id).findFirst().get();
-        Context.getInstance().setPitchStartX(player.getPitchStartX());
-        Context.getInstance().setPitchStartY(player.getPitchStartY());
+        return success;
     }
 
     private static void createAndStartPlayerPeerServiceGRPCServer() throws IOException {
         int port = Context.getInstance().getPort();
-        gRPCServer = ServerBuilder.forPort(port).addService(new PeerServiceImpl()).build();
+        gRPCServer = ServerBuilder.forPort(port).addService(new GRPCServiceImpl()).build();
         gRPCServer.start();
-    }
-
-    private static void registerPlayers(List<Player> players) {
-        int id = Context.getInstance().getId();
-        players.stream().filter(p -> p.getId() != id).forEach(p -> NetworkView.getInstance().registerPlayer(p));
     }
 
     private static boolean createMQTTClient() {
@@ -141,7 +122,7 @@ public class PlayerPeer {
     }
 
     private static boolean subscribeToMQTTTopics() {
-        mqttClient.setCallback(new MqttHandler());
+        mqttClient.setCallback(new MQTTHandler());
 
         boolean isSubscribedSuccessfully = true;
         isSubscribedSuccessfully &= subscribeToMQTTTopic(MQTTConfig.GAME_START_TOPIC, MQTTConfig.GAME_START_QOS);
@@ -149,20 +130,19 @@ public class PlayerPeer {
         return isSubscribedSuccessfully;
     }
 
-    public static void main(String[] args) throws IOException {
-        StateManager.getInstance().setState(State.Idling);
+    public static void main(String[] args) throws IOException, InterruptedException {
+        Context.getInstance().setState(State.Idle);
 
         keyboard = new BufferedReader(new InputStreamReader(System.in));
         restClient = Client.create();
 
         boolean isInitializationSuccessful = initializeContext();
         if (!isInitializationSuccessful) return;
-        List<Player> players = registerPlayer();
-        if (players == null) return;
-        getPitchStartPosition(players);
+        boolean isPlayerAdminServerRegistrationSuccessful = handlePlayerAdminServerRegistration();
+        if (!isPlayerAdminServerRegistrationSuccessful) return;
         createAndStartPlayerPeerServiceGRPCServer();
-        registerPlayers(players);
-        NetworkView.getInstance().greetAllPlayers();
+        Context.getInstance().createGRPCHandles();
+        Context.getInstance().greetAllPlayers();
         boolean isMQTTClientCreationSuccessful = createMQTTClient();
         if (!isMQTTClientCreationSuccessful) return;
         boolean isConnectionWithMQTTBrokerEstablished = connectToMQTTBroker();
@@ -170,11 +150,6 @@ public class PlayerPeer {
         boolean isSubscribedSuccessfully = subscribeToMQTTTopics();
         if (!isSubscribedSuccessfully) return;
 
-        try {
-            gRPCServer.awaitTermination(); // TODO: when do we call server.awaitTermination()?
-        } catch (InterruptedException e) {
-            // TODO: how do we handle this?
-            throw new RuntimeException(e);
-        }
+        gRPCServer.awaitTermination(); // TODO: when do we call server.awaitTermination()?
     }
 }

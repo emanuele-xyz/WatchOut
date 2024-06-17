@@ -9,9 +9,6 @@ import java.util.stream.Collectors;
 import watchout.player.PlayerPeerServiceOuterClass.GreetingRequest;
 import watchout.player.PlayerPeerServiceOuterClass.Empty;
 import watchout.player.PlayerPeerServiceOuterClass.LeaderMessage;
-import watchout.player.responseobservers.ElectionResponseObserver;
-import watchout.player.responseobservers.GreetingResponseObserver;
-import watchout.player.responseobservers.LeaderResponseObserver;
 
 public class NetworkView {
     private static NetworkView instance = null;
@@ -54,20 +51,20 @@ public class NetworkView {
         int pitchStartY = Context.getInstance().getPitchStartY();
 
         GreetingRequest request = GreetingRequest.newBuilder().setId(id).setAddress("localhost").setPort(port).setPitchStartX(pitchStartX).setPitchStartY(pitchStartY).build();
-        players.forEach(p -> playerGRPCHandles.get(p.getId()).getStub().greeting(request, new GreetingResponseObserver(p.getId(), p.getAddress(), p.getPort())));
+        players.forEach(p -> playerGRPCHandles.get(p.getId()).getStub().greeting(request, new GRPCObserverGreetingResponse(p.getId(), p.getAddress(), p.getPort())));
     }
 
     public synchronized void holdElection() {
         players.stream()
                 .filter(NetworkView::isPlayerCloserToHomeBase)
-                .forEach(p -> playerGRPCHandles.get(p.getId()).getStub().election(Empty.getDefaultInstance(), new ElectionResponseObserver(p.getId())));
+                .forEach(p -> playerGRPCHandles.get(p.getId()).getStub().election(Empty.getDefaultInstance(), new GRPCObserverElectionResponse(p.getId())));
     }
 
     public synchronized void announceLeader() {
         int id = Context.getInstance().getId();
 
         LeaderMessage leaderMessage = LeaderMessage.newBuilder().setId(id).build();
-        players.forEach(p -> playerGRPCHandles.get(p.getId()).getStub().leader(leaderMessage, new LeaderResponseObserver(p.getId())));
+        players.forEach(p -> playerGRPCHandles.get(p.getId()).getStub().leader(leaderMessage, new GRPCObserverLeaderResponse(p.getId())));
     }
 
     // Is the player p closer to the home base than we are?

@@ -5,7 +5,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import watchout.MQTTConfig;
 
-public class MqttHandler implements MqttCallback {
+public class MQTTHandler implements MqttCallback {
 
     @Override
     public void connectionLost(Throwable throwable) {

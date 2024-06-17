@@ -1,13 +1,12 @@
-package watchout.player.responseobservers;
+package watchout.player;
 
 import io.grpc.stub.StreamObserver;
-import watchout.player.EventHandlers;
 import watchout.player.PlayerPeerServiceOuterClass.Empty;
 
-public class LeaderResponseObserver implements StreamObserver<Empty> {
+public class GRPCObserverLeaderResponse implements StreamObserver<Empty> {
     private final int otherCandidate;
 
-    public LeaderResponseObserver(int otherCandidate) {
+    public GRPCObserverLeaderResponse(int otherCandidate) {
         this.otherCandidate = otherCandidate;
     }
 
