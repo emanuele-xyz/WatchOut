@@ -107,7 +107,7 @@ public class Context {
 
     public synchronized void onGameStartReceive() {
         // TODO: to be implemented
-        System.out.println("game start notification received");
+        System.out.println("Game start notification received");
         if (mayBeSeeker()) {
             System.out.println("I may be the seeker");
             sendElectionToNextPlayer();
@@ -159,7 +159,7 @@ public class Context {
 
     private void sendElectionToNextPlayer() {
         int nextPlayerId = findNextPlayerId();
-        System.out.println("sending election to player " + nextPlayerId);
+        System.out.println("Sending election to player " + nextPlayerId);
         GRPCHandle handle = otherPlayersGRPCHandles.get(nextPlayerId);
         ElectionMessage msg = ElectionMessage.newBuilder()
                 .setId(id)
@@ -172,7 +172,7 @@ public class Context {
 
     private void forwardElectionToNextPlayer(ElectionMessage msg) {
         int nextPlayerId = findNextPlayerId();
-        System.out.println("forwarding election to player " + nextPlayerId);
+        System.out.println("Forwarding election to player " + nextPlayerId);
         GRPCHandle handle = otherPlayersGRPCHandles.get(nextPlayerId);
         handle.getStub().election(msg, new GRPCObserverElectionResponse());
     }
