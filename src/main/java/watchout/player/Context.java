@@ -10,8 +10,7 @@ import java.util.Map;
 
 import watchout.player.PlayerPeerServiceOuterClass.GreetingRequest;
 import watchout.player.PlayerPeerServiceOuterClass.ElectionMessage;
-
-import javax.ws.rs.core.StreamingOutput;
+import watchout.player.PlayerPeerServiceOuterClass.SeekerMessage;
 
 public class Context {
     private static Context instance;
@@ -30,12 +29,9 @@ public class Context {
     private int pitchStartY;
     private List<Player> otherPlayers;
     private Map<Integer, GRPCHandle> otherPlayersGRPCHandles;
+    private int seekerId;
 
     private Context() {
-    }
-
-    public synchronized State getState() {
-        return state;
     }
 
     public synchronized void setState(State state) {
@@ -56,14 +52,6 @@ public class Context {
 
     public synchronized void setPort(int port) {
         this.port = port;
-    }
-
-    public synchronized int getPitchStartX() {
-        return pitchStartX;
-    }
-
-    public synchronized int getPitchStartY() {
-        return pitchStartY;
     }
 
     public synchronized void setPitchStart(int x, int y) {
@@ -106,12 +94,24 @@ public class Context {
     }
 
     public synchronized void onGameStartReceive() {
-        // TODO: to be implemented
         System.out.println("Game start notification received");
-        if (mayBeSeeker()) {
-            System.out.println("I may be the seeker");
-            sendElectionToNextPlayer();
-            state = State.Voted;
+
+        switch (state) {
+            case Idle: {
+                if (mayBeSeeker()) {
+                    System.out.println("I may be the seeker. Election started!");
+                    state = State.Voted;
+                    sendElectionToNextPlayer();
+                }
+            }
+            break;
+
+            case Voted:
+            case Seeker:
+            case Hider: {
+                // NOTE: game already started
+            }
+            break;
         }
     }
 
@@ -123,12 +123,12 @@ public class Context {
 
         switch (state) {
             case Idle: {
+                state = State.Voted;
                 if (isCloserToHomeBaseThan(candidateId, candidatePitchStartX, candidatePitchStartY)) {
                     sendElectionToNextPlayer();
                 } else {
                     forwardElectionToNextPlayer(msg);
                 }
-                state = State.Voted;
             }
             break;
 
@@ -136,11 +136,11 @@ public class Context {
                 if (id == candidateId) {
                     // NOTE: the election message went around the ring. We are the seeker!
                     System.out.println("I'm the seeker");
-                    sendSeekerToNextPlayer();
                     state = State.Seeker;
+                    sendSeekerToNextPlayer();
                 } else {
                     if (isCloserToHomeBaseThan(candidateId, candidatePitchStartX, candidatePitchStartY)) {
-                        // NOTE: do nothing. We have already voted and our candidate is better than the one we have received
+                        // NOTE: We have already voted and our candidate is better than the one we have received
                         System.out.println("Blocking election for player " + candidateId);
                     } else {
                         forwardElectionToNextPlayer(msg);
@@ -150,10 +150,60 @@ public class Context {
             break;
 
             case Seeker: {
-                // TODO: to be implemented
-                // TODO: should this happen?
-                break;
+                // NOTE: The ring has already elected a seeker (this peer). Thus, block any other election.
+                System.out.println("Blocking election for player " + candidateId);
             }
+            break;
+
+            case Hider: {
+                // NOTE: The ring has already elected a seeker (not this peer). Thus, block any other election.
+                System.out.println("Blocking election for player " + candidateId);
+            }
+            break;
+        }
+    }
+
+    public synchronized void onSeekerReceive(SeekerMessage msg) {
+        int seekerId = msg.getId();
+        System.out.println("Player " + seekerId + " is the seeker");
+
+        switch (state) {
+            case Idle: {
+                // NOTE: Being idle, the seeker message I'm receiving cannot be my own. Just forward it.
+                // NOTE: Having missed the chance to vote, I'm a hider.
+                state = State.Hider;
+                this.seekerId = seekerId;
+                System.out.println("I'm a hider");
+                forwardSeekerToNextPlayer(msg);
+            }
+            break;
+
+            case Voted: {
+                // NOTE: The seeker message cannot be my own (only a seeker can send a seeker message). Just forward it.
+                // NOTE: I voted and I'm not the seeker. Thus, I'm a hider.
+                state = State.Hider;
+                this.seekerId = seekerId;
+                System.out.println("I'm a hider" + seekerId);
+                forwardSeekerToNextPlayer(msg);
+            }
+            break;
+
+            case Seeker: {
+                if (id == seekerId) {
+                    // NOTE: It's my own seeker message.
+                    // NOTE: start token ring.
+                    System.out.println("Game officially started!");
+                    sendTokenToNextPlayer();
+                } else {
+                    throw new IllegalStateException("Multiple seeker messages on the ring");
+                }
+            }
+            break;
+
+            case Hider: {
+                throw new IllegalStateException("Hider received seeker message");
+            }
+            // break;
         }
     }
 
@@ -167,7 +217,6 @@ public class Context {
                 .setPitchStartY(pitchStartY)
                 .build();
         handle.getStub().election(msg, new GRPCObserverElectionResponse());
-
     }
 
     private void forwardElectionToNextPlayer(ElectionMessage msg) {
@@ -178,6 +227,21 @@ public class Context {
     }
 
     private void sendSeekerToNextPlayer() {
+        int nextPlayerId = findNextPlayerId();
+        System.out.println("Sending seeker announcement to player " + nextPlayerId);
+        GRPCHandle handle = otherPlayersGRPCHandles.get(nextPlayerId);
+        SeekerMessage msg = SeekerMessage.newBuilder().setId(id).build();
+        handle.getStub().seeker(msg, new GRPCObserverSeekerResponse());
+    }
+
+    private void forwardSeekerToNextPlayer(SeekerMessage msg) {
+        int nextPlayerId = findNextPlayerId();
+        System.out.println("Forwarding seeker to player " + nextPlayerId);
+        GRPCHandle handle = otherPlayersGRPCHandles.get(nextPlayerId);
+        handle.getStub().seeker(msg, new GRPCObserverSeekerResponse());
+    }
+
+    private void sendTokenToNextPlayer() {
         // TODO: to be implemented
     }
 

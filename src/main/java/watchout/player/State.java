@@ -4,4 +4,5 @@ public enum State {
     Idle,
     Voted,
     Seeker,
+    Hider,
 }

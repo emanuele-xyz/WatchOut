@@ -11,8 +11,8 @@ watchout/player/PlayerPeerServiceGrpc.java
  watchout.player.PlayerPeerServiceGrpc$PlayerPeerServiceStub
 watchout/admin/AdminClient.java
  watchout.admin.AdminClient
-watchout/common/Player.java
- watchout.common.Player
+watchout/player/GRPCServiceImpl.java
+ watchout.player.GRPCServiceImpl
 watchout/player/PlayerPeerServiceOuterClass.java
  watchout.player.PlayerPeerServiceOuterClass
  watchout.player.PlayerPeerServiceOuterClass$1
@@ -28,10 +28,10 @@ watchout/player/PlayerPeerServiceOuterClass.java
  watchout.player.PlayerPeerServiceOuterClass$GreetingRequest$1
  watchout.player.PlayerPeerServiceOuterClass$GreetingRequest$Builder
  watchout.player.PlayerPeerServiceOuterClass$GreetingRequestOrBuilder
- watchout.player.PlayerPeerServiceOuterClass$LeaderMessage
- watchout.player.PlayerPeerServiceOuterClass$LeaderMessage$1
- watchout.player.PlayerPeerServiceOuterClass$LeaderMessage$Builder
- watchout.player.PlayerPeerServiceOuterClass$LeaderMessageOrBuilder
+ watchout.player.PlayerPeerServiceOuterClass$SeekerMessage
+ watchout.player.PlayerPeerServiceOuterClass$SeekerMessage$1
+ watchout.player.PlayerPeerServiceOuterClass$SeekerMessage$Builder
+ watchout.player.PlayerPeerServiceOuterClass$SeekerMessageOrBuilder
 watchout/player/State.java
  watchout.player.State
 watchout/player/GRPCHandle.java
@@ -46,14 +46,17 @@ watchout/MQTTConfig.java
  watchout.MQTTConfig
 watchout/common/HeartbeatStatResult.java
  watchout.common.HeartbeatStatResult
-watchout/player/GRPCObserverElectionResponse.java
- watchout.player.GRPCObserverElectionResponse
+watchout/player/MQTTHandler.java
+ watchout.player.MQTTHandler
 watchout/admin/Heartbeats.java
  watchout.admin.Heartbeats
-watchout/admin/HeartbeatsServices.java
- watchout.admin.HeartbeatsServices
+watchout/player/Context.java
+ watchout.player.Context
+ watchout.player.Context$1
 watchout/admin/Player.java
  watchout.admin.Player
+watchout/player/GRPCObserverSeekerResponse.java
+ watchout.player.GRPCObserverSeekerResponse
 watchout/admin/AdminServer.java
  watchout.admin.AdminServer
 watchout/Pitch.java
@@ -66,12 +69,11 @@ watchout/common/HeartbeatList.java
  watchout.common.HeartbeatList
 watchout/common/Heartbeat.java
  watchout.common.Heartbeat
-watchout/player/Context.java
- watchout.player.Context
- watchout.player.Context$1
-watchout/player/MQTTHandler.java
- watchout.player.MQTTHandler
-watchout/player/GRPCServiceImpl.java
- watchout.player.GRPCServiceImpl
+watchout/player/GRPCObserverElectionResponse.java
+ watchout.player.GRPCObserverElectionResponse
+watchout/common/Player.java
+ watchout.common.Player
 watchout/player/PlayerPeer.java
  watchout.player.PlayerPeer
+watchout/admin/HeartbeatsServices.java
+ watchout.admin.HeartbeatsServices

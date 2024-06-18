@@ -1908,8 +1908,8 @@ public final class PlayerPeerServiceOuterClass {
 
   }
 
-  public interface LeaderMessageOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:watchout.player.LeaderMessage)
+  public interface SeekerMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:watchout.player.SeekerMessage)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -1919,25 +1919,25 @@ public final class PlayerPeerServiceOuterClass {
     int getId();
   }
   /**
-   * Protobuf type {@code watchout.player.LeaderMessage}
+   * Protobuf type {@code watchout.player.SeekerMessage}
    */
-  public static final class LeaderMessage extends
+  public static final class SeekerMessage extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:watchout.player.LeaderMessage)
-      LeaderMessageOrBuilder {
+      // @@protoc_insertion_point(message_implements:watchout.player.SeekerMessage)
+      SeekerMessageOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use LeaderMessage.newBuilder() to construct.
-    private LeaderMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // Use SeekerMessage.newBuilder() to construct.
+    private SeekerMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private LeaderMessage() {
+    private SeekerMessage() {
     }
 
     @java.lang.Override
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(
         UnusedPrivateParameter unused) {
-      return new LeaderMessage();
+      return new SeekerMessage();
     }
 
     @java.lang.Override
@@ -1945,7 +1945,7 @@ public final class PlayerPeerServiceOuterClass {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private LeaderMessage(
+    private SeekerMessage(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1989,15 +1989,15 @@ public final class PlayerPeerServiceOuterClass {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return watchout.player.PlayerPeerServiceOuterClass.internal_static_watchout_player_LeaderMessage_descriptor;
+      return watchout.player.PlayerPeerServiceOuterClass.internal_static_watchout_player_SeekerMessage_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return watchout.player.PlayerPeerServiceOuterClass.internal_static_watchout_player_LeaderMessage_fieldAccessorTable
+      return watchout.player.PlayerPeerServiceOuterClass.internal_static_watchout_player_SeekerMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              watchout.player.PlayerPeerServiceOuterClass.LeaderMessage.class, watchout.player.PlayerPeerServiceOuterClass.LeaderMessage.Builder.class);
+              watchout.player.PlayerPeerServiceOuterClass.SeekerMessage.class, watchout.player.PlayerPeerServiceOuterClass.SeekerMessage.Builder.class);
     }
 
     public static final int ID_FIELD_NUMBER = 1;
@@ -2051,10 +2051,10 @@ public final class PlayerPeerServiceOuterClass {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof watchout.player.PlayerPeerServiceOuterClass.LeaderMessage)) {
+      if (!(obj instanceof watchout.player.PlayerPeerServiceOuterClass.SeekerMessage)) {
         return super.equals(obj);
       }
-      watchout.player.PlayerPeerServiceOuterClass.LeaderMessage other = (watchout.player.PlayerPeerServiceOuterClass.LeaderMessage) obj;
+      watchout.player.PlayerPeerServiceOuterClass.SeekerMessage other = (watchout.player.PlayerPeerServiceOuterClass.SeekerMessage) obj;
 
       if (getId()
           != other.getId()) return false;
@@ -2076,69 +2076,69 @@ public final class PlayerPeerServiceOuterClass {
       return hash;
     }
 
-    public static watchout.player.PlayerPeerServiceOuterClass.LeaderMessage parseFrom(
+    public static watchout.player.PlayerPeerServiceOuterClass.SeekerMessage parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static watchout.player.PlayerPeerServiceOuterClass.LeaderMessage parseFrom(
+    public static watchout.player.PlayerPeerServiceOuterClass.SeekerMessage parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static watchout.player.PlayerPeerServiceOuterClass.LeaderMessage parseFrom(
+    public static watchout.player.PlayerPeerServiceOuterClass.SeekerMessage parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static watchout.player.PlayerPeerServiceOuterClass.LeaderMessage parseFrom(
+    public static watchout.player.PlayerPeerServiceOuterClass.SeekerMessage parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static watchout.player.PlayerPeerServiceOuterClass.LeaderMessage parseFrom(byte[] data)
+    public static watchout.player.PlayerPeerServiceOuterClass.SeekerMessage parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static watchout.player.PlayerPeerServiceOuterClass.LeaderMessage parseFrom(
+    public static watchout.player.PlayerPeerServiceOuterClass.SeekerMessage parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static watchout.player.PlayerPeerServiceOuterClass.LeaderMessage parseFrom(java.io.InputStream input)
+    public static watchout.player.PlayerPeerServiceOuterClass.SeekerMessage parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static watchout.player.PlayerPeerServiceOuterClass.LeaderMessage parseFrom(
+    public static watchout.player.PlayerPeerServiceOuterClass.SeekerMessage parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static watchout.player.PlayerPeerServiceOuterClass.LeaderMessage parseDelimitedFrom(java.io.InputStream input)
+    public static watchout.player.PlayerPeerServiceOuterClass.SeekerMessage parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static watchout.player.PlayerPeerServiceOuterClass.LeaderMessage parseDelimitedFrom(
+    public static watchout.player.PlayerPeerServiceOuterClass.SeekerMessage parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static watchout.player.PlayerPeerServiceOuterClass.LeaderMessage parseFrom(
+    public static watchout.player.PlayerPeerServiceOuterClass.SeekerMessage parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static watchout.player.PlayerPeerServiceOuterClass.LeaderMessage parseFrom(
+    public static watchout.player.PlayerPeerServiceOuterClass.SeekerMessage parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -2151,7 +2151,7 @@ public final class PlayerPeerServiceOuterClass {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(watchout.player.PlayerPeerServiceOuterClass.LeaderMessage prototype) {
+    public static Builder newBuilder(watchout.player.PlayerPeerServiceOuterClass.SeekerMessage prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -2167,26 +2167,26 @@ public final class PlayerPeerServiceOuterClass {
       return builder;
     }
     /**
-     * Protobuf type {@code watchout.player.LeaderMessage}
+     * Protobuf type {@code watchout.player.SeekerMessage}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:watchout.player.LeaderMessage)
-        watchout.player.PlayerPeerServiceOuterClass.LeaderMessageOrBuilder {
+        // @@protoc_insertion_point(builder_implements:watchout.player.SeekerMessage)
+        watchout.player.PlayerPeerServiceOuterClass.SeekerMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return watchout.player.PlayerPeerServiceOuterClass.internal_static_watchout_player_LeaderMessage_descriptor;
+        return watchout.player.PlayerPeerServiceOuterClass.internal_static_watchout_player_SeekerMessage_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return watchout.player.PlayerPeerServiceOuterClass.internal_static_watchout_player_LeaderMessage_fieldAccessorTable
+        return watchout.player.PlayerPeerServiceOuterClass.internal_static_watchout_player_SeekerMessage_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                watchout.player.PlayerPeerServiceOuterClass.LeaderMessage.class, watchout.player.PlayerPeerServiceOuterClass.LeaderMessage.Builder.class);
+                watchout.player.PlayerPeerServiceOuterClass.SeekerMessage.class, watchout.player.PlayerPeerServiceOuterClass.SeekerMessage.Builder.class);
       }
 
-      // Construct using watchout.player.PlayerPeerServiceOuterClass.LeaderMessage.newBuilder()
+      // Construct using watchout.player.PlayerPeerServiceOuterClass.SeekerMessage.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -2212,17 +2212,17 @@ public final class PlayerPeerServiceOuterClass {
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return watchout.player.PlayerPeerServiceOuterClass.internal_static_watchout_player_LeaderMessage_descriptor;
+        return watchout.player.PlayerPeerServiceOuterClass.internal_static_watchout_player_SeekerMessage_descriptor;
       }
 
       @java.lang.Override
-      public watchout.player.PlayerPeerServiceOuterClass.LeaderMessage getDefaultInstanceForType() {
-        return watchout.player.PlayerPeerServiceOuterClass.LeaderMessage.getDefaultInstance();
+      public watchout.player.PlayerPeerServiceOuterClass.SeekerMessage getDefaultInstanceForType() {
+        return watchout.player.PlayerPeerServiceOuterClass.SeekerMessage.getDefaultInstance();
       }
 
       @java.lang.Override
-      public watchout.player.PlayerPeerServiceOuterClass.LeaderMessage build() {
-        watchout.player.PlayerPeerServiceOuterClass.LeaderMessage result = buildPartial();
+      public watchout.player.PlayerPeerServiceOuterClass.SeekerMessage build() {
+        watchout.player.PlayerPeerServiceOuterClass.SeekerMessage result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -2230,8 +2230,8 @@ public final class PlayerPeerServiceOuterClass {
       }
 
       @java.lang.Override
-      public watchout.player.PlayerPeerServiceOuterClass.LeaderMessage buildPartial() {
-        watchout.player.PlayerPeerServiceOuterClass.LeaderMessage result = new watchout.player.PlayerPeerServiceOuterClass.LeaderMessage(this);
+      public watchout.player.PlayerPeerServiceOuterClass.SeekerMessage buildPartial() {
+        watchout.player.PlayerPeerServiceOuterClass.SeekerMessage result = new watchout.player.PlayerPeerServiceOuterClass.SeekerMessage(this);
         result.id_ = id_;
         onBuilt();
         return result;
@@ -2271,16 +2271,16 @@ public final class PlayerPeerServiceOuterClass {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof watchout.player.PlayerPeerServiceOuterClass.LeaderMessage) {
-          return mergeFrom((watchout.player.PlayerPeerServiceOuterClass.LeaderMessage)other);
+        if (other instanceof watchout.player.PlayerPeerServiceOuterClass.SeekerMessage) {
+          return mergeFrom((watchout.player.PlayerPeerServiceOuterClass.SeekerMessage)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(watchout.player.PlayerPeerServiceOuterClass.LeaderMessage other) {
-        if (other == watchout.player.PlayerPeerServiceOuterClass.LeaderMessage.getDefaultInstance()) return this;
+      public Builder mergeFrom(watchout.player.PlayerPeerServiceOuterClass.SeekerMessage other) {
+        if (other == watchout.player.PlayerPeerServiceOuterClass.SeekerMessage.getDefaultInstance()) return this;
         if (other.getId() != 0) {
           setId(other.getId());
         }
@@ -2299,11 +2299,11 @@ public final class PlayerPeerServiceOuterClass {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        watchout.player.PlayerPeerServiceOuterClass.LeaderMessage parsedMessage = null;
+        watchout.player.PlayerPeerServiceOuterClass.SeekerMessage parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (watchout.player.PlayerPeerServiceOuterClass.LeaderMessage) e.getUnfinishedMessage();
+          parsedMessage = (watchout.player.PlayerPeerServiceOuterClass.SeekerMessage) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -2356,41 +2356,41 @@ public final class PlayerPeerServiceOuterClass {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:watchout.player.LeaderMessage)
+      // @@protoc_insertion_point(builder_scope:watchout.player.SeekerMessage)
     }
 
-    // @@protoc_insertion_point(class_scope:watchout.player.LeaderMessage)
-    private static final watchout.player.PlayerPeerServiceOuterClass.LeaderMessage DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:watchout.player.SeekerMessage)
+    private static final watchout.player.PlayerPeerServiceOuterClass.SeekerMessage DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new watchout.player.PlayerPeerServiceOuterClass.LeaderMessage();
+      DEFAULT_INSTANCE = new watchout.player.PlayerPeerServiceOuterClass.SeekerMessage();
     }
 
-    public static watchout.player.PlayerPeerServiceOuterClass.LeaderMessage getDefaultInstance() {
+    public static watchout.player.PlayerPeerServiceOuterClass.SeekerMessage getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<LeaderMessage>
-        PARSER = new com.google.protobuf.AbstractParser<LeaderMessage>() {
+    private static final com.google.protobuf.Parser<SeekerMessage>
+        PARSER = new com.google.protobuf.AbstractParser<SeekerMessage>() {
       @java.lang.Override
-      public LeaderMessage parsePartialFrom(
+      public SeekerMessage parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new LeaderMessage(input, extensionRegistry);
+        return new SeekerMessage(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<LeaderMessage> parser() {
+    public static com.google.protobuf.Parser<SeekerMessage> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<LeaderMessage> getParserForType() {
+    public com.google.protobuf.Parser<SeekerMessage> getParserForType() {
       return PARSER;
     }
 
     @java.lang.Override
-    public watchout.player.PlayerPeerServiceOuterClass.LeaderMessage getDefaultInstanceForType() {
+    public watchout.player.PlayerPeerServiceOuterClass.SeekerMessage getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -2412,10 +2412,10 @@ public final class PlayerPeerServiceOuterClass {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_watchout_player_ElectionMessage_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_watchout_player_LeaderMessage_descriptor;
+    internal_static_watchout_player_SeekerMessage_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_watchout_player_LeaderMessage_fieldAccessorTable;
+      internal_static_watchout_player_SeekerMessage_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -2430,13 +2430,13 @@ public final class PlayerPeerServiceOuterClass {
       "ress\030\002 \001(\t\022\014\n\004port\030\003 \001(\005\022\023\n\013pitchStartX\030" +
       "\004 \001(\005\022\023\n\013pitchStartY\030\005 \001(\005\"\007\n\005Empty\"G\n\017E" +
       "lectionMessage\022\n\n\002id\030\001 \001(\005\022\023\n\013pitchStart" +
-      "X\030\002 \001(\005\022\023\n\013pitchStartY\030\003 \001(\005\"\033\n\rLeaderMe" +
+      "X\030\002 \001(\005\022\023\n\013pitchStartY\030\003 \001(\005\"\033\n\rSeekerMe" +
       "ssage\022\n\n\002id\030\001 \001(\0052\341\001\n\021PlayerPeerService\022" +
       "D\n\010greeting\022 .watchout.player.GreetingRe" +
       "quest\032\026.watchout.player.Empty\022D\n\010electio" +
       "n\022 .watchout.player.ElectionMessage\032\026.wa" +
-      "tchout.player.Empty\022@\n\006leader\022\036.watchout" +
-      ".player.LeaderMessage\032\026.watchout.player." +
+      "tchout.player.Empty\022@\n\006seeker\022\036.watchout" +
+      ".player.SeekerMessage\032\026.watchout.player." +
       "Emptyb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
@@ -2461,11 +2461,11 @@ public final class PlayerPeerServiceOuterClass {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_watchout_player_ElectionMessage_descriptor,
         new java.lang.String[] { "Id", "PitchStartX", "PitchStartY", });
-    internal_static_watchout_player_LeaderMessage_descriptor =
+    internal_static_watchout_player_SeekerMessage_descriptor =
       getDescriptor().getMessageTypes().get(3);
-    internal_static_watchout_player_LeaderMessage_fieldAccessorTable = new
+    internal_static_watchout_player_SeekerMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_watchout_player_LeaderMessage_descriptor,
+        internal_static_watchout_player_SeekerMessage_descriptor,
         new java.lang.String[] { "Id", });
   }
 

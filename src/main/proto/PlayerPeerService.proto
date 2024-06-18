@@ -19,12 +19,12 @@ message ElectionMessage {
   int32 pitchStartY = 3;
 }
 
-message LeaderMessage {
+message SeekerMessage {
   int32 id = 1;
 }
 
 service PlayerPeerService {
   rpc greeting(GreetingRequest) returns (Empty);
   rpc election(ElectionMessage) returns (Empty);
-  rpc leader(LeaderMessage) returns (Empty);
+  rpc seeker(SeekerMessage) returns (Empty);
 }
