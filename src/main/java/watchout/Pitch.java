@@ -5,6 +5,7 @@ import java.util.Arrays;
 public class Pitch {
     public static final int SIDE = 10;
     public static final int[] HOME_BASE_COORDS = {4, 5};
+    public static final double DISTANCE_TO_METERS_FACTOR = 10.0;
 
     public static int getRandomStartingPitchCoordinate() {
         return (int) (Math.random() * Pitch.SIDE);

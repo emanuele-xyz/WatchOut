@@ -120,6 +120,37 @@ public final class PlayerPeerServiceGrpc {
     return getSeekerMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.TokenMessage,
+      watchout.player.PlayerPeerServiceOuterClass.Empty> getTokenMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "token",
+      requestType = watchout.player.PlayerPeerServiceOuterClass.TokenMessage.class,
+      responseType = watchout.player.PlayerPeerServiceOuterClass.Empty.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.TokenMessage,
+      watchout.player.PlayerPeerServiceOuterClass.Empty> getTokenMethod() {
+    io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.TokenMessage, watchout.player.PlayerPeerServiceOuterClass.Empty> getTokenMethod;
+    if ((getTokenMethod = PlayerPeerServiceGrpc.getTokenMethod) == null) {
+      synchronized (PlayerPeerServiceGrpc.class) {
+        if ((getTokenMethod = PlayerPeerServiceGrpc.getTokenMethod) == null) {
+          PlayerPeerServiceGrpc.getTokenMethod = getTokenMethod =
+              io.grpc.MethodDescriptor.<watchout.player.PlayerPeerServiceOuterClass.TokenMessage, watchout.player.PlayerPeerServiceOuterClass.Empty>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "token"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  watchout.player.PlayerPeerServiceOuterClass.TokenMessage.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  watchout.player.PlayerPeerServiceOuterClass.Empty.getDefaultInstance()))
+              .setSchemaDescriptor(new PlayerPeerServiceMethodDescriptorSupplier("token"))
+              .build();
+        }
+      }
+    }
+    return getTokenMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -168,6 +199,13 @@ public final class PlayerPeerServiceGrpc {
       asyncUnimplementedUnaryCall(getSeekerMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void token(watchout.player.PlayerPeerServiceOuterClass.TokenMessage request,
+        io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty> responseObserver) {
+      asyncUnimplementedUnaryCall(getTokenMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -191,6 +229,13 @@ public final class PlayerPeerServiceGrpc {
                 watchout.player.PlayerPeerServiceOuterClass.SeekerMessage,
                 watchout.player.PlayerPeerServiceOuterClass.Empty>(
                   this, METHODID_SEEKER)))
+          .addMethod(
+            getTokenMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                watchout.player.PlayerPeerServiceOuterClass.TokenMessage,
+                watchout.player.PlayerPeerServiceOuterClass.Empty>(
+                  this, METHODID_TOKEN)))
           .build();
     }
   }
@@ -236,6 +281,14 @@ public final class PlayerPeerServiceGrpc {
       asyncUnaryCall(
           getChannel().newCall(getSeekerMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void token(watchout.player.PlayerPeerServiceOuterClass.TokenMessage request,
+        io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getTokenMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -275,6 +328,13 @@ public final class PlayerPeerServiceGrpc {
     public watchout.player.PlayerPeerServiceOuterClass.Empty seeker(watchout.player.PlayerPeerServiceOuterClass.SeekerMessage request) {
       return blockingUnaryCall(
           getChannel(), getSeekerMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public watchout.player.PlayerPeerServiceOuterClass.Empty token(watchout.player.PlayerPeerServiceOuterClass.TokenMessage request) {
+      return blockingUnaryCall(
+          getChannel(), getTokenMethod(), getCallOptions(), request);
     }
   }
 
@@ -319,11 +379,20 @@ public final class PlayerPeerServiceGrpc {
       return futureUnaryCall(
           getChannel().newCall(getSeekerMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<watchout.player.PlayerPeerServiceOuterClass.Empty> token(
+        watchout.player.PlayerPeerServiceOuterClass.TokenMessage request) {
+      return futureUnaryCall(
+          getChannel().newCall(getTokenMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_GREETING = 0;
   private static final int METHODID_ELECTION = 1;
   private static final int METHODID_SEEKER = 2;
+  private static final int METHODID_TOKEN = 3;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -352,6 +421,10 @@ public final class PlayerPeerServiceGrpc {
           break;
         case METHODID_SEEKER:
           serviceImpl.seeker((watchout.player.PlayerPeerServiceOuterClass.SeekerMessage) request,
+              (io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty>) responseObserver);
+          break;
+        case METHODID_TOKEN:
+          serviceImpl.token((watchout.player.PlayerPeerServiceOuterClass.TokenMessage) request,
               (io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty>) responseObserver);
           break;
         default:
@@ -418,6 +491,7 @@ public final class PlayerPeerServiceGrpc {
               .addMethod(getGreetingMethod())
               .addMethod(getElectionMethod())
               .addMethod(getSeekerMethod())
+              .addMethod(getTokenMethod())
               .build();
         }
       }

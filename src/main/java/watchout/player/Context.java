@@ -11,8 +11,11 @@ import java.util.Map;
 import watchout.player.PlayerPeerServiceOuterClass.GreetingRequest;
 import watchout.player.PlayerPeerServiceOuterClass.ElectionMessage;
 import watchout.player.PlayerPeerServiceOuterClass.SeekerMessage;
+import watchout.player.PlayerPeerServiceOuterClass.TokenMessage;
 
 public class Context {
+    private static final double PLAYER_SPEED = 2.0; // meters per second
+
     private static Context instance;
 
     public synchronized static Context getInstance() {
@@ -183,7 +186,7 @@ public class Context {
                 // NOTE: I voted and I'm not the seeker. Thus, I'm a hider.
                 state = State.Hider;
                 this.seekerId = seekerId;
-                System.out.println("I'm a hider" + seekerId);
+                System.out.println("I'm a hider");
                 forwardSeekerToNextPlayer(msg);
             }
             break;
@@ -194,6 +197,7 @@ public class Context {
                     // NOTE: start token ring.
                     System.out.println("Game officially started!");
                     sendTokenToNextPlayer();
+                    // TODO: start seeking other players (spawn another thread)
                 } else {
                     throw new IllegalStateException("Multiple seeker messages on the ring");
                 }
@@ -204,6 +208,35 @@ public class Context {
                 throw new IllegalStateException("Hider received seeker message");
             }
             // break;
+        }
+    }
+
+    public synchronized void onTokenReceive(TokenMessage msg) {
+        System.out.println("Received token");
+
+        switch (state) {
+            case Idle: {
+                // NOTE: We have skipped the election. I'm a hider.
+                state = State.Hider;
+                this.seekerId = msg.getSeekerId();
+                System.out.println("I'm a hider");
+                goForTheHomeBase();
+                forwardTokenToNextPlayer(msg);
+            }
+            break;
+            case Voted: {
+                throw new IllegalStateException("Voter received token");
+            }
+            // break;
+            case Seeker: {
+                forwardTokenToNextPlayer(msg);
+            }
+            break;
+            case Hider: {
+                goForTheHomeBase();
+                forwardTokenToNextPlayer(msg);
+            }
+            break;
         }
     }
 
@@ -242,7 +275,58 @@ public class Context {
     }
 
     private void sendTokenToNextPlayer() {
-        // TODO: to be implemented
+        int nextPlayerId = findNextPlayerId();
+        System.out.println("Sending token to player " + nextPlayerId);
+        GRPCHandle handle = otherPlayersGRPCHandles.get(nextPlayerId);
+        TokenMessage msg = TokenMessage.newBuilder().setSeekerId(id).build();
+        handle.getStub().token(msg, new GRPCObserverTokenResponse());
+    }
+
+    private void forwardTokenToNextPlayer(TokenMessage msg) {
+        int nextPlayerId = findNextPlayerId();
+        System.out.println("Forwarding token to player " + nextPlayerId);
+        GRPCHandle handle = otherPlayersGRPCHandles.get(nextPlayerId);
+        handle.getStub().token(msg, new GRPCObserverTokenResponse());
+    }
+
+    private void goForTheHomeBase() {
+        // NOTE: try to reach the home base
+        {
+            double distanceFromPitch = Pitch.getDistanceFromHomeBase(pitchStartX, pitchStartY) * Pitch.DISTANCE_TO_METERS_FACTOR;
+            double timeToReachHomeBase = distanceFromPitch / PLAYER_SPEED;
+            System.out.println("Going for the home base in " + timeToReachHomeBase + " seconds");
+            try {
+                wait((long) timeToReachHomeBase * 1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // NOTE: While going for the home base, we may either have been tagged or not
+        switch (state) {
+            case Idle:
+            case Voted:
+            case Seeker:
+            case Safe: {
+                throw new IllegalStateException("Illegal state after going for home base");
+            } //break;
+            case Hider: {
+                // NOTE: we have not been tagged and we have reached the home base
+                state = State.Safe;
+                System.out.println("I have reached the home base");
+                try {
+                    // NOTE: player waits 10 seconds inside the home base
+                    wait(10 * 1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            break;
+            case Tagged: {
+                // NOTE: do nothing
+            }
+            break;
+        }
     }
 
     private int findNextPlayerId() {

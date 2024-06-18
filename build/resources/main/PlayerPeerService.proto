@@ -23,8 +23,13 @@ message SeekerMessage {
   int32 id = 1;
 }
 
+message TokenMessage {
+  int32 seekerId = 1;
+}
+
 service PlayerPeerService {
   rpc greeting(GreetingRequest) returns (Empty);
   rpc election(ElectionMessage) returns (Empty);
   rpc seeker(SeekerMessage) returns (Empty);
+  rpc token(TokenMessage) returns (Empty);
 }
