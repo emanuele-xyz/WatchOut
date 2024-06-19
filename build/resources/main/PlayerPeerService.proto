@@ -9,9 +9,7 @@ message GreetingRequest {
   int32 pitchStartY = 5;
 }
 
-message Empty {
-
-}
+message Empty {}
 
 message ElectionMessage {
   int32 id = 1;
@@ -27,9 +25,16 @@ message TokenMessage {
   int32 seekerId = 1;
 }
 
+message LeaveRoundMessage {
+  int32 id = 1;
+  bool isTagged = 2;
+}
+
 service PlayerPeerService {
   rpc greeting(GreetingRequest) returns (Empty);
   rpc election(ElectionMessage) returns (Empty);
   rpc seeker(SeekerMessage) returns (Empty);
   rpc token(TokenMessage) returns (Empty);
+  rpc tag(Empty) returns (Empty);
+  rpc leaveRound(LeaveRoundMessage) returns (Empty);
 }

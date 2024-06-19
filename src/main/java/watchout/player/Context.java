@@ -271,7 +271,7 @@ public class Context {
             Player p = findClosestTaggablePlayer();
             if (p != null) {
                 // NOTE: pursue the closest taggable player.
-                double d = Pitch.getDistance(currentPitchX, currentPitchY, p.getPitchStartX(), p.getPitchStartY());
+                double d = Pitch.getDistance(currentPitchX, currentPitchY, p.getPitchStartX(), p.getPitchStartY()) * Pitch.DISTANCE_TO_METERS_FACTOR;
                 double timeToReachPlayer = d / PLAYER_SPEED;
                 System.out.println("Pursuing player " + p.getId() + " reaching it in " + timeToReachPlayer + " seconds");
                 try {
