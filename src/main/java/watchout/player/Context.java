@@ -73,13 +73,7 @@ public class Context {
     }
 
     public synchronized void greetAllPlayers() {
-        GreetingRequest request = GreetingRequest.newBuilder()
-                .setId(id)
-                .setAddress("localhost")
-                .setPort(port)
-                .setPitchStartX(pitchStartX)
-                .setPitchStartY(pitchStartY)
-                .build();
+        GreetingRequest request = GreetingRequest.newBuilder().setId(id).setAddress("localhost").setPort(port).setPitchStartX(pitchStartX).setPitchStartY(pitchStartY).build();
         otherPlayers.forEach(p -> {
             GRPCHandle handle = otherPlayersGRPCHandles.get(p.getId());
             handle.getStub().greeting(request, new GRPCObserverGreetingResponse(p.getId(), p.getAddress(), p.getPort()));
@@ -87,11 +81,7 @@ public class Context {
     }
 
     public synchronized void onGreetingReceive(GreetingRequest greeting) {
-        System.out.println(
-                "Greeting from player " + greeting.getId()
-                        + " - listening at " + greeting.getAddress() + ":" + greeting.getPort()
-                        + " - starting at (" + greeting.getPitchStartX() + "," + greeting.getPitchStartY() + ")"
-        );
+        System.out.println("Greeting from player " + greeting.getId() + " - listening at " + greeting.getAddress() + ":" + greeting.getPort() + " - starting at (" + greeting.getPitchStartX() + "," + greeting.getPitchStartY() + ")");
         otherPlayers.add(new Player(greeting.getId(), greeting.getAddress(), greeting.getPort(), greeting.getPitchStartX(), greeting.getPitchStartY()));
         otherPlayersGRPCHandles.put(greeting.getId(), new GRPCHandle(greeting.getAddress(), greeting.getPort()));
     }
@@ -111,8 +101,10 @@ public class Context {
 
             case Voted:
             case Seeker:
-            case Hider: {
-                // NOTE: game already started
+            case Hider:
+            case Safe:
+            case Tagged: {
+                // NOTE: game already started. Ignore the message.
             }
             break;
         }
@@ -152,14 +144,11 @@ public class Context {
             }
             break;
 
-            case Seeker: {
-                // NOTE: The ring has already elected a seeker (this peer). Thus, block any other election.
-                System.out.println("Blocking election for player " + candidateId);
-            }
-            break;
-
-            case Hider: {
-                // NOTE: The ring has already elected a seeker (not this peer). Thus, block any other election.
+            case Seeker:
+            case Hider:
+            case Safe:
+            case Tagged: {
+                // NOTE: The ring has already elected a seeker. Thus, block any other election.
                 System.out.println("Blocking election for player " + candidateId);
             }
             break;
@@ -204,8 +193,10 @@ public class Context {
             }
             break;
 
-            case Hider: {
-                throw new IllegalStateException("Hider received seeker message");
+            case Hider:
+            case Safe:
+            case Tagged: {
+                throw new IllegalStateException("Received seeker message while being " + state);
             }
             // break;
         }
@@ -224,19 +215,60 @@ public class Context {
                 forwardTokenToNextPlayer(msg);
             }
             break;
-            case Voted: {
-                throw new IllegalStateException("Voter received token");
-            }
-            // break;
-            case Seeker: {
-                forwardTokenToNextPlayer(msg);
-            }
-            break;
             case Hider: {
                 goForTheHomeBase();
                 forwardTokenToNextPlayer(msg);
             }
+            case Seeker:
+            case Safe:
+            case Tagged: {
+                forwardTokenToNextPlayer(msg);
+            }
             break;
+            case Voted: {
+                throw new IllegalStateException("Received token while being " + state);
+            }
+            // break;
+        }
+    }
+
+    private void goForTheHomeBase() {
+        // NOTE: try to reach the home base
+        {
+            double distanceFromPitch = Pitch.getDistanceFromHomeBase(pitchStartX, pitchStartY) * Pitch.DISTANCE_TO_METERS_FACTOR;
+            double timeToReachHomeBase = distanceFromPitch / PLAYER_SPEED;
+            System.out.println("Going for the home base in " + timeToReachHomeBase + " seconds");
+            try {
+                wait((long) timeToReachHomeBase * 1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // NOTE: While going for the home base, we may either have been tagged or not
+        switch (state) {
+            case Hider: {
+                // NOTE: We have reached the home base and we have not been tagged.
+                state = State.Safe;
+                System.out.println("I'm in the home base");
+                try {
+                    // NOTE: Player waits 10 seconds inside the home base.
+                    wait(10 * 1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            break;
+            case Tagged: {
+                // NOTE: We have been tagged while trying to reach the home base. We are out!
+            }
+            break;
+            case Idle:
+            case Voted:
+            case Seeker:
+            case Safe: {
+                throw new IllegalStateException("Illegal state " + state + " after trying to reach the home base");
+            } //break;
         }
     }
 
@@ -244,11 +276,7 @@ public class Context {
         int nextPlayerId = findNextPlayerId();
         System.out.println("Sending election to player " + nextPlayerId);
         GRPCHandle handle = otherPlayersGRPCHandles.get(nextPlayerId);
-        ElectionMessage msg = ElectionMessage.newBuilder()
-                .setId(id)
-                .setPitchStartX(pitchStartX)
-                .setPitchStartY(pitchStartY)
-                .build();
+        ElectionMessage msg = ElectionMessage.newBuilder().setId(id).setPitchStartX(pitchStartX).setPitchStartY(pitchStartY).build();
         handle.getStub().election(msg, new GRPCObserverElectionResponse());
     }
 
@@ -287,46 +315,6 @@ public class Context {
         System.out.println("Forwarding token to player " + nextPlayerId);
         GRPCHandle handle = otherPlayersGRPCHandles.get(nextPlayerId);
         handle.getStub().token(msg, new GRPCObserverTokenResponse());
-    }
-
-    private void goForTheHomeBase() {
-        // NOTE: try to reach the home base
-        {
-            double distanceFromPitch = Pitch.getDistanceFromHomeBase(pitchStartX, pitchStartY) * Pitch.DISTANCE_TO_METERS_FACTOR;
-            double timeToReachHomeBase = distanceFromPitch / PLAYER_SPEED;
-            System.out.println("Going for the home base in " + timeToReachHomeBase + " seconds");
-            try {
-                wait((long) timeToReachHomeBase * 1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // NOTE: While going for the home base, we may either have been tagged or not
-        switch (state) {
-            case Idle:
-            case Voted:
-            case Seeker:
-            case Safe: {
-                throw new IllegalStateException("Illegal state after going for home base");
-            } //break;
-            case Hider: {
-                // NOTE: we have not been tagged and we have reached the home base
-                state = State.Safe;
-                System.out.println("I have reached the home base");
-                try {
-                    // NOTE: player waits 10 seconds inside the home base
-                    wait(10 * 1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            break;
-            case Tagged: {
-                // NOTE: do nothing
-            }
-            break;
-        }
     }
 
     private int findNextPlayerId() {
