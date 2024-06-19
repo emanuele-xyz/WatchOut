@@ -37,4 +37,5 @@ service PlayerPeerService {
   rpc token(TokenMessage) returns (Empty);
   rpc tag(Empty) returns (Empty);
   rpc leaveRound(LeaveRoundMessage) returns (Empty);
+  // TODO: rpc endRound(Empty) returns (Empty);
 }

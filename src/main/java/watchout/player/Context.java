@@ -35,6 +35,7 @@ public class Context {
     private Set<Integer> taggablePlayers;
     private int currentPitchX;
     private int currentPitchY;
+    // TODO: private boolean isPursuing;
 
     private Context() {
         taggablePlayers = new HashSet<>();
@@ -89,6 +90,7 @@ public class Context {
         System.out.println("Greeting from player " + greeting.getId() + " - listening at " + greeting.getAddress() + ":" + greeting.getPort() + " - starting at (" + greeting.getPitchStartX() + "," + greeting.getPitchStartY() + ")");
         otherPlayers.add(new Player(greeting.getId(), greeting.getAddress(), greeting.getPort(), greeting.getPitchStartX(), greeting.getPitchStartY()));
         otherPlayersGRPCHandles.put(greeting.getId(), new GRPCHandle(greeting.getAddress(), greeting.getPort()));
+        // TODO: if (isPursuing) taggablePlayers.add(greeting.getId());
     }
 
     public synchronized void onGameStartReceive() {
@@ -190,6 +192,7 @@ public class Context {
                     // NOTE: It's my own seeker message.
                     // NOTE: start token ring.
                     System.out.println("Game officially started!");
+                    // TODO: isPursuing = true;
                     new Thread(this::seekOtherPlayers).start();
                     sendTokenToNextPlayer();
                 } else {
@@ -224,7 +227,7 @@ public class Context {
                 goForTheHomeBase();
                 forwardTokenToNextPlayer(msg);
             }
-            case Seeker:
+            case Seeker: // TODO: if pursuing, forward token, otherwise block token and send round end message
             case Safe:
             case Tagged: {
                 forwardTokenToNextPlayer(msg);
@@ -246,10 +249,12 @@ public class Context {
                 state = State.Tagged;
                 sendRoundLeave();
             }
+            case Safe: {
+                // NOTE: do nothing
+            }
             break;
             case Voted:
             case Seeker:
-            case Safe:
             case Tagged: {
                 throw new IllegalStateException("Received tag while being " + state);
             }
@@ -264,7 +269,12 @@ public class Context {
         taggablePlayers.remove(id);
     }
 
+    // TODO: onRoundEndReceive()
+    // TODO: when ending round set state to idle and forward it (if not seeker) or block (if seeker)
+
     private synchronized void seekOtherPlayers() {
+        System.out.println("Pursuit started");
+
         taggablePlayers.clear();
         otherPlayers.forEach(p -> taggablePlayers.add(p.getId()));
         while (true) {
@@ -293,6 +303,9 @@ public class Context {
                 break;
             }
         }
+
+        //TODO: isPursuing = false;
+        System.out.println("Pursuit ended");
     }
 
     private void goForTheHomeBase() {
