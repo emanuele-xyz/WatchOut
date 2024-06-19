@@ -151,6 +151,68 @@ public final class PlayerPeerServiceGrpc {
     return getTokenMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.Empty,
+      watchout.player.PlayerPeerServiceOuterClass.Empty> getTagMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "tag",
+      requestType = watchout.player.PlayerPeerServiceOuterClass.Empty.class,
+      responseType = watchout.player.PlayerPeerServiceOuterClass.Empty.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.Empty,
+      watchout.player.PlayerPeerServiceOuterClass.Empty> getTagMethod() {
+    io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.Empty, watchout.player.PlayerPeerServiceOuterClass.Empty> getTagMethod;
+    if ((getTagMethod = PlayerPeerServiceGrpc.getTagMethod) == null) {
+      synchronized (PlayerPeerServiceGrpc.class) {
+        if ((getTagMethod = PlayerPeerServiceGrpc.getTagMethod) == null) {
+          PlayerPeerServiceGrpc.getTagMethod = getTagMethod =
+              io.grpc.MethodDescriptor.<watchout.player.PlayerPeerServiceOuterClass.Empty, watchout.player.PlayerPeerServiceOuterClass.Empty>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "tag"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  watchout.player.PlayerPeerServiceOuterClass.Empty.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  watchout.player.PlayerPeerServiceOuterClass.Empty.getDefaultInstance()))
+              .setSchemaDescriptor(new PlayerPeerServiceMethodDescriptorSupplier("tag"))
+              .build();
+        }
+      }
+    }
+    return getTagMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.LeaveRoundMessage,
+      watchout.player.PlayerPeerServiceOuterClass.Empty> getLeaveRoundMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "leaveRound",
+      requestType = watchout.player.PlayerPeerServiceOuterClass.LeaveRoundMessage.class,
+      responseType = watchout.player.PlayerPeerServiceOuterClass.Empty.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.LeaveRoundMessage,
+      watchout.player.PlayerPeerServiceOuterClass.Empty> getLeaveRoundMethod() {
+    io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.LeaveRoundMessage, watchout.player.PlayerPeerServiceOuterClass.Empty> getLeaveRoundMethod;
+    if ((getLeaveRoundMethod = PlayerPeerServiceGrpc.getLeaveRoundMethod) == null) {
+      synchronized (PlayerPeerServiceGrpc.class) {
+        if ((getLeaveRoundMethod = PlayerPeerServiceGrpc.getLeaveRoundMethod) == null) {
+          PlayerPeerServiceGrpc.getLeaveRoundMethod = getLeaveRoundMethod =
+              io.grpc.MethodDescriptor.<watchout.player.PlayerPeerServiceOuterClass.LeaveRoundMessage, watchout.player.PlayerPeerServiceOuterClass.Empty>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "leaveRound"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  watchout.player.PlayerPeerServiceOuterClass.LeaveRoundMessage.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  watchout.player.PlayerPeerServiceOuterClass.Empty.getDefaultInstance()))
+              .setSchemaDescriptor(new PlayerPeerServiceMethodDescriptorSupplier("leaveRound"))
+              .build();
+        }
+      }
+    }
+    return getLeaveRoundMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -206,6 +268,20 @@ public final class PlayerPeerServiceGrpc {
       asyncUnimplementedUnaryCall(getTokenMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void tag(watchout.player.PlayerPeerServiceOuterClass.Empty request,
+        io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty> responseObserver) {
+      asyncUnimplementedUnaryCall(getTagMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void leaveRound(watchout.player.PlayerPeerServiceOuterClass.LeaveRoundMessage request,
+        io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty> responseObserver) {
+      asyncUnimplementedUnaryCall(getLeaveRoundMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -236,6 +312,20 @@ public final class PlayerPeerServiceGrpc {
                 watchout.player.PlayerPeerServiceOuterClass.TokenMessage,
                 watchout.player.PlayerPeerServiceOuterClass.Empty>(
                   this, METHODID_TOKEN)))
+          .addMethod(
+            getTagMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                watchout.player.PlayerPeerServiceOuterClass.Empty,
+                watchout.player.PlayerPeerServiceOuterClass.Empty>(
+                  this, METHODID_TAG)))
+          .addMethod(
+            getLeaveRoundMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                watchout.player.PlayerPeerServiceOuterClass.LeaveRoundMessage,
+                watchout.player.PlayerPeerServiceOuterClass.Empty>(
+                  this, METHODID_LEAVE_ROUND)))
           .build();
     }
   }
@@ -289,6 +379,22 @@ public final class PlayerPeerServiceGrpc {
       asyncUnaryCall(
           getChannel().newCall(getTokenMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void tag(watchout.player.PlayerPeerServiceOuterClass.Empty request,
+        io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getTagMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void leaveRound(watchout.player.PlayerPeerServiceOuterClass.LeaveRoundMessage request,
+        io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getLeaveRoundMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -335,6 +441,20 @@ public final class PlayerPeerServiceGrpc {
     public watchout.player.PlayerPeerServiceOuterClass.Empty token(watchout.player.PlayerPeerServiceOuterClass.TokenMessage request) {
       return blockingUnaryCall(
           getChannel(), getTokenMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public watchout.player.PlayerPeerServiceOuterClass.Empty tag(watchout.player.PlayerPeerServiceOuterClass.Empty request) {
+      return blockingUnaryCall(
+          getChannel(), getTagMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public watchout.player.PlayerPeerServiceOuterClass.Empty leaveRound(watchout.player.PlayerPeerServiceOuterClass.LeaveRoundMessage request) {
+      return blockingUnaryCall(
+          getChannel(), getLeaveRoundMethod(), getCallOptions(), request);
     }
   }
 
@@ -387,12 +507,30 @@ public final class PlayerPeerServiceGrpc {
       return futureUnaryCall(
           getChannel().newCall(getTokenMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<watchout.player.PlayerPeerServiceOuterClass.Empty> tag(
+        watchout.player.PlayerPeerServiceOuterClass.Empty request) {
+      return futureUnaryCall(
+          getChannel().newCall(getTagMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<watchout.player.PlayerPeerServiceOuterClass.Empty> leaveRound(
+        watchout.player.PlayerPeerServiceOuterClass.LeaveRoundMessage request) {
+      return futureUnaryCall(
+          getChannel().newCall(getLeaveRoundMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_GREETING = 0;
   private static final int METHODID_ELECTION = 1;
   private static final int METHODID_SEEKER = 2;
   private static final int METHODID_TOKEN = 3;
+  private static final int METHODID_TAG = 4;
+  private static final int METHODID_LEAVE_ROUND = 5;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -425,6 +563,14 @@ public final class PlayerPeerServiceGrpc {
           break;
         case METHODID_TOKEN:
           serviceImpl.token((watchout.player.PlayerPeerServiceOuterClass.TokenMessage) request,
+              (io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty>) responseObserver);
+          break;
+        case METHODID_TAG:
+          serviceImpl.tag((watchout.player.PlayerPeerServiceOuterClass.Empty) request,
+              (io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty>) responseObserver);
+          break;
+        case METHODID_LEAVE_ROUND:
+          serviceImpl.leaveRound((watchout.player.PlayerPeerServiceOuterClass.LeaveRoundMessage) request,
               (io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty>) responseObserver);
           break;
         default:
@@ -492,6 +638,8 @@ public final class PlayerPeerServiceGrpc {
               .addMethod(getElectionMethod())
               .addMethod(getSeekerMethod())
               .addMethod(getTokenMethod())
+              .addMethod(getTagMethod())
+              .addMethod(getLeaveRoundMethod())
               .build();
         }
       }

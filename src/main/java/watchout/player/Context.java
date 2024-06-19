@@ -9,6 +9,8 @@ import watchout.player.PlayerPeerServiceOuterClass.GreetingRequest;
 import watchout.player.PlayerPeerServiceOuterClass.ElectionMessage;
 import watchout.player.PlayerPeerServiceOuterClass.SeekerMessage;
 import watchout.player.PlayerPeerServiceOuterClass.TokenMessage;
+import watchout.player.PlayerPeerServiceOuterClass.Empty;
+import watchout.player.PlayerPeerServiceOuterClass.LeaveRoundMessage;
 
 public class Context {
     private static final double PLAYER_SPEED = 2.0; // meters per second
@@ -31,6 +33,8 @@ public class Context {
     private Map<Integer, GRPCHandle> otherPlayersGRPCHandles;
     private int seekerId; // TODO: may be removed
     private Set<Integer> taggablePlayers;
+    private int currentPitchX;
+    private int currentPitchY;
 
     private Context() {
         taggablePlayers = new HashSet<>();
@@ -59,6 +63,8 @@ public class Context {
     public synchronized void setPitchStart(int x, int y) {
         this.pitchStartX = x;
         this.pitchStartY = y;
+        currentPitchX = x;
+        currentPitchY = y;
     }
 
     public synchronized void setPlayers(List<Player> registeredPlayers) {
@@ -184,8 +190,6 @@ public class Context {
                     // NOTE: It's my own seeker message.
                     // NOTE: start token ring.
                     System.out.println("Game officially started!");
-                    if (!taggablePlayers.isEmpty()) throw new IllegalStateException("The set of taggable players should be empty before starting the game");
-                    otherPlayers.forEach(p -> taggablePlayers.add(p.getId()));
                     new Thread(this::seekOtherPlayers).start();
                     sendTokenToNextPlayer();
                 } else {
@@ -233,22 +237,62 @@ public class Context {
         }
     }
 
-    private synchronized void seekOtherPlayers() {
-        // NOTE: find the closest hider (neither safe nor tagged).
-        Player player = otherPlayers.stream()
-                .filter(p -> taggablePlayers.contains(p.getId()))
-                .min((p1, p2) -> {
-            double d1 = Pitch.getDistance(pitchStartX, pitchStartY, p1.getPitchStartX(), p1.getPitchStartY());
-            double d2 = Pitch.getDistance(pitchStartX, pitchStartY, p2.getPitchStartX(), p2.getPitchStartY());
-            return Double.compare(d1, d2);
-        })
-                .orElse(null);
-
-        if (player != null) {
-
+    public synchronized void onTagReceive() {
+        System.out.println("Tag received");
+        switch (state) {
+            case Idle:
+            case Hider: {
+                System.out.println("I'm tagged");
+                state = State.Tagged;
+                sendRoundLeave();
+            }
+            break;
+            case Voted:
+            case Seeker:
+            case Safe:
+            case Tagged: {
+                throw new IllegalStateException("Received tag while being " + state);
+            }
+            //break;
         }
+    }
 
-        // NOTE: try to tag it
+    public synchronized void onLeaveRoundReceive(LeaveRoundMessage msg) {
+        int id = msg.getId();
+        boolean isTagged = msg.getIsTagged();
+        System.out.println("Player " + id + " is " + (isTagged ? "tagged" : "safe"));
+        taggablePlayers.remove(id);
+    }
+
+    private synchronized void seekOtherPlayers() {
+        taggablePlayers.clear();
+        otherPlayers.forEach(p -> taggablePlayers.add(p.getId()));
+        while (true) {
+            Player p = findClosestTaggablePlayer();
+            if (p != null) {
+                // NOTE: pursue the closest taggable player.
+                double d = Pitch.getDistance(currentPitchX, currentPitchY, p.getPitchStartX(), p.getPitchStartY());
+                double timeToReachPlayer = d / PLAYER_SPEED;
+                System.out.println("Pursuing player " + p.getId() + " reaching it in " + timeToReachPlayer + " seconds");
+                try {
+                    wait((long) timeToReachPlayer * 1000 + 1); // NOTE: +1 to fix 0 distance.
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                currentPitchX = p.getPitchStartX();
+                currentPitchY = p.getPitchStartY();
+
+                // NOTE: after the pursuit, we check if the player is still taggable
+                if (taggablePlayers.contains(p.getId())) {
+                    // NOTE: if it is, try to tag it
+                    sendTagToPlayer(p.getId());
+                    taggablePlayers.remove(p.getId());
+                }
+            } else {
+                // NOTE: There are no more taggable players. The game has ended.
+                break;
+            }
+        }
     }
 
     private void goForTheHomeBase() {
@@ -276,10 +320,12 @@ public class Context {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                sendRoundLeave();
             }
             break;
             case Tagged: {
-                // NOTE: We have been tagged while trying to reach the home base. We are out!
+                // NOTE: we have been tagged while trying to reach the home base. We are out!
+                // NOTE: we announce it when we actually get tagged.
             }
             break;
             case Idle:
@@ -336,6 +382,26 @@ public class Context {
         handle.getStub().token(msg, new GRPCObserverTokenResponse());
     }
 
+    private void sendTagToPlayer(int id) {
+        System.out.println("Sending tag to player " + id);
+        GRPCHandle handle = otherPlayersGRPCHandles.get(id);
+        handle.getStub().tag(Empty.getDefaultInstance(), new GRPCObserverTagResponse());
+    }
+
+    private void sendRoundLeave() {
+        if (state != State.Tagged && state != State.Safe) {
+            throw new IllegalStateException("Send round leave while being " + state);
+        }
+        LeaveRoundMessage msg = LeaveRoundMessage.newBuilder()
+                .setId(id)
+                .setIsTagged(state == State.Tagged)
+                .build();
+        otherPlayers.forEach(p -> {
+            GRPCHandle handle = otherPlayersGRPCHandles.get(p.getId());
+            handle.getStub().leaveRound(msg, new GRPCObserverLeaveRoundResponse());
+        });
+    }
+
     private int findNextPlayerId() {
         // NOTE: we suppose there is at least another player
         int minId = otherPlayers.stream().mapToInt(Player::getId).min().getAsInt();
@@ -359,5 +425,16 @@ public class Context {
         } else {
             return id > otherId;
         }
+    }
+
+    private Player findClosestTaggablePlayer() {
+        return otherPlayers.stream()
+                .filter(p -> taggablePlayers.contains(p.getId()))
+                .min((p1, p2) -> {
+                    double d1 = Pitch.getDistance(currentPitchX, currentPitchY, p1.getPitchStartX(), p1.getPitchStartY());
+                    double d2 = Pitch.getDistance(currentPitchX, currentPitchY, p2.getPitchStartX(), p2.getPitchStartY());
+                    return Double.compare(d1, d2);
+                })
+                .orElse(null);
     }
 }
