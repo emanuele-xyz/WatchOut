@@ -3,10 +3,7 @@ package watchout.player;
 import watchout.Pitch;
 import watchout.common.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import watchout.player.PlayerPeerServiceOuterClass.GreetingRequest;
 import watchout.player.PlayerPeerServiceOuterClass.ElectionMessage;
@@ -32,9 +29,11 @@ public class Context {
     private int pitchStartY;
     private List<Player> otherPlayers;
     private Map<Integer, GRPCHandle> otherPlayersGRPCHandles;
-    private int seekerId;
+    private int seekerId; // TODO: may be removed
+    private Set<Integer> taggablePlayers;
 
     private Context() {
+        taggablePlayers = new HashSet<>();
     }
 
     public synchronized void setState(State state) {
@@ -185,8 +184,10 @@ public class Context {
                     // NOTE: It's my own seeker message.
                     // NOTE: start token ring.
                     System.out.println("Game officially started!");
+                    if (!taggablePlayers.isEmpty()) throw new IllegalStateException("The set of taggable players should be empty before starting the game");
+                    otherPlayers.forEach(p -> taggablePlayers.add(p.getId()));
+                    new Thread(this::seekOtherPlayers).start();
                     sendTokenToNextPlayer();
-                    // TODO: start seeking other players (spawn another thread)
                 } else {
                     throw new IllegalStateException("Multiple seeker messages on the ring");
                 }
@@ -230,6 +231,24 @@ public class Context {
             }
             // break;
         }
+    }
+
+    private synchronized void seekOtherPlayers() {
+        // NOTE: find the closest hider (neither safe nor tagged).
+        Player player = otherPlayers.stream()
+                .filter(p -> taggablePlayers.contains(p.getId()))
+                .min((p1, p2) -> {
+            double d1 = Pitch.getDistance(pitchStartX, pitchStartY, p1.getPitchStartX(), p1.getPitchStartY());
+            double d2 = Pitch.getDistance(pitchStartX, pitchStartY, p2.getPitchStartX(), p2.getPitchStartY());
+            return Double.compare(d1, d2);
+        })
+                .orElse(null);
+
+        if (player != null) {
+
+        }
+
+        // NOTE: try to tag it
     }
 
     private void goForTheHomeBase() {

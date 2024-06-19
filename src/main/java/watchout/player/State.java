@@ -5,6 +5,6 @@ public enum State {
     Voted,
     Seeker,
     Hider,
-    Safe, // TODO: handle this case in switch statements (FIRST THING TO DO!)
-    Tagged, // TODO: handle this case in switch statements (FIRST THING TO DO!)
+    Safe,
+    Tagged,
 }
