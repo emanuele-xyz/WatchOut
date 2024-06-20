@@ -10,6 +10,7 @@ import org.eclipse.paho.client.mqttv3.*;
 import watchout.MQTTConfig;
 import watchout.common.Player;
 import watchout.common.PlayerList;
+import watchout.simulators.HRSimulator;
 
 import javax.ws.rs.core.Response;
 import java.io.BufferedReader;
@@ -24,6 +25,7 @@ public class PlayerPeer {
     private static Server gRPCServer = null;
     private static String mqttClientId = null;
     private static MqttClient mqttClient = null;
+    private static HRBuffer hrBuffer = null;
 
     private static boolean initializeContext() throws IOException {
         System.out.print("ID > ");
@@ -141,7 +143,9 @@ public class PlayerPeer {
         if (!isInitializationSuccessful) return;
         boolean isPlayerAdminServerRegistrationSuccessful = handlePlayerAdminServerRegistration();
         if (!isPlayerAdminServerRegistrationSuccessful) return;
-        // TODO: start heartbeats collection and submission thread
+        hrBuffer =  new HRBuffer();
+        new HRSimulator(hrBuffer).start();
+        new HRSender().start();
         createAndStartPlayerPeerServiceGRPCServer();
         Context.getInstance().createGRPCHandles();
         Context.getInstance().greetAllPlayers();

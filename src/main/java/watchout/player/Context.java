@@ -76,7 +76,13 @@ public class Context {
     }
 
     public synchronized void greetAllPlayers() {
-        GreetingRequest request = GreetingRequest.newBuilder().setId(id).setAddress("localhost").setPort(port).setPitchStartX(pitchStartX).setPitchStartY(pitchStartY).build();
+        GreetingRequest request = GreetingRequest.newBuilder()
+                .setId(id)
+                .setAddress("localhost")
+                .setPort(port)
+                .setPitchStartX(pitchStartX)
+                .setPitchStartY(pitchStartY)
+                .build();
         otherPlayers.forEach(p -> {
             GRPCHandle handle = otherPlayersGRPCHandles.get(p.getId());
             handle.getStub().greeting(request, new GRPCObserverGreetingResponse(p.getId(), p.getAddress(), p.getPort()));
@@ -260,7 +266,8 @@ public class Context {
                 System.out.println("I'm tagged");
                 state = State.Tagged;
                 sendRoundLeave();
-            } break;
+            }
+            break;
 
             case Hider: {
                 // NOTE: A hider that is tagged may be trying to go for the home base.
