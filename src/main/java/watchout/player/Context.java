@@ -256,11 +256,20 @@ public class Context {
     public synchronized void onTagReceive() {
         System.out.println("Tag received");
         switch (state) {
-            case Idle:
-            case Hider: {
+            case Idle: {
                 System.out.println("I'm tagged");
                 state = State.Tagged;
                 sendRoundLeave();
+            } break;
+
+            case Hider: {
+                // NOTE: A hider that is tagged may be trying to go for the home base.
+                // NOTE: It still has to reach the home base, otherwise it would be safe.
+                // NOTE: Thus, notify the possible waiting thread.
+                System.out.println("I'm tagged");
+                state = State.Tagged;
+                sendRoundLeave();
+                notify();
             }
             break;
 
@@ -446,10 +455,6 @@ public class Context {
     }
 
     private void sendRoundEndToAllPlayers() {
-        if (state != State.Seeker) {
-            throw new IllegalStateException("Announcing end of round while not being the seeker");
-        }
-
         System.out.println("Announcing end of round to all other players");
         otherPlayers.forEach(p -> {
             GRPCHandle handle = otherPlayersGRPCHandles.get(p.getId());
