@@ -3490,7 +3490,7 @@ public final class PlayerPeerServiceOuterClass {
       "X\030\002 \001(\005\022\023\n\013pitchStartY\030\003 \001(\005\"\033\n\rSeekerMe" +
       "ssage\022\n\n\002id\030\001 \001(\005\" \n\014TokenMessage\022\020\n\010see" +
       "kerId\030\001 \001(\005\"1\n\021LeaveRoundMessage\022\n\n\002id\030\001" +
-      " \001(\005\022\020\n\010isTagged\030\002 \001(\0102\242\003\n\021PlayerPeerSer" +
+      " \001(\005\022\020\n\010isTagged\030\002 \001(\0102\336\003\n\021PlayerPeerSer" +
       "vice\022D\n\010greeting\022 .watchout.player.Greet" +
       "ingRequest\032\026.watchout.player.Empty\022D\n\010el" +
       "ection\022 .watchout.player.ElectionMessage" +
@@ -3501,7 +3501,8 @@ public final class PlayerPeerServiceOuterClass {
       "g\022\026.watchout.player.Empty\032\026.watchout.pla" +
       "yer.Empty\022H\n\nleaveRound\022\".watchout.playe" +
       "r.LeaveRoundMessage\032\026.watchout.player.Em" +
-      "ptyb\006proto3"
+      "pty\022:\n\010endRound\022\026.watchout.player.Empty\032" +
+      "\026.watchout.player.Emptyb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

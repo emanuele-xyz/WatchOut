@@ -35,7 +35,7 @@ public class Context {
     private Set<Integer> taggablePlayers;
     private int currentPitchX;
     private int currentPitchY;
-    // TODO: private boolean isPursuing;
+    private boolean isPursuing;
 
     private Context() {
         taggablePlayers = new HashSet<>();
@@ -90,7 +90,9 @@ public class Context {
         System.out.println("Greeting from player " + greeting.getId() + " - listening at " + greeting.getAddress() + ":" + greeting.getPort() + " - starting at (" + greeting.getPitchStartX() + "," + greeting.getPitchStartY() + ")");
         otherPlayers.add(new Player(greeting.getId(), greeting.getAddress(), greeting.getPort(), greeting.getPitchStartX(), greeting.getPitchStartY()));
         otherPlayersGRPCHandles.put(greeting.getId(), new GRPCHandle(greeting.getAddress(), greeting.getPort()));
-        // TODO: if (isPursuing) taggablePlayers.add(greeting.getId());
+        if (isPursuing) {
+            taggablePlayers.add(greeting.getId());
+        }
     }
 
     public synchronized void onGameStartReceive() {
@@ -191,8 +193,8 @@ public class Context {
                 if (id == seekerId) {
                     // NOTE: It's my own seeker message.
                     // NOTE: start token ring.
-                    System.out.println("Game officially started!");
-                    // TODO: isPursuing = true;
+                    System.out.println("A new round has started");
+                    isPursuing = true;
                     new Thread(this::seekOtherPlayers).start();
                     sendTokenToNextPlayer();
                 } else {
@@ -223,16 +225,29 @@ public class Context {
                 forwardTokenToNextPlayer(msg);
             }
             break;
+
             case Hider: {
                 goForTheHomeBase();
                 forwardTokenToNextPlayer(msg);
             }
-            case Seeker: // TODO: if pursuing, forward token, otherwise block token and send round end message
+            break;
+
+            case Seeker: {
+                if (isPursuing) {
+                    forwardTokenToNextPlayer(msg);
+                } else {
+                    System.out.println("The round is over");
+                    sendRoundEndToAllPlayers();
+                }
+            }
+            break;
+
             case Safe:
             case Tagged: {
                 forwardTokenToNextPlayer(msg);
             }
             break;
+
             case Voted: {
                 throw new IllegalStateException("Received token while being " + state);
             }
@@ -249,10 +264,13 @@ public class Context {
                 state = State.Tagged;
                 sendRoundLeave();
             }
+            break;
+
             case Safe: {
                 // NOTE: do nothing
             }
             break;
+
             case Voted:
             case Seeker:
             case Tagged: {
@@ -269,8 +287,24 @@ public class Context {
         taggablePlayers.remove(id);
     }
 
-    // TODO: onRoundEndReceive()
-    // TODO: when ending round set state to idle and forward it (if not seeker) or block (if seeker)
+    public synchronized void onEndRoundReceive() {
+        System.out.println("The round is over");
+        switch (state) {
+            case Idle:
+            case Hider:
+            case Safe:
+            case Tagged: {
+                state = State.Idle;
+            }
+            break;
+
+            case Voted:
+            case Seeker: {
+                throw new IllegalStateException("Received round end while being " + state);
+            }
+            //break;
+        }
+    }
 
     private synchronized void seekOtherPlayers() {
         System.out.println("Pursuit started");
@@ -285,7 +319,7 @@ public class Context {
                 double timeToReachPlayer = d / PLAYER_SPEED;
                 System.out.println("Pursuing player " + p.getId() + " reaching it in " + timeToReachPlayer + " seconds");
                 try {
-                    wait((long) timeToReachPlayer * 1000 + 1); // NOTE: +1 to fix 0 distance.
+                    wait((long) timeToReachPlayer * 1000 + 1); // NOTE: +1 to avoid 0 timeout due to 0 distance.
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -304,7 +338,7 @@ public class Context {
             }
         }
 
-        //TODO: isPursuing = false;
+        isPursuing = false;
         System.out.println("Pursuit ended");
     }
 
@@ -336,11 +370,14 @@ public class Context {
                 sendRoundLeave();
             }
             break;
+
             case Tagged: {
                 // NOTE: we have been tagged while trying to reach the home base. We are out!
                 // NOTE: we announce it when we actually get tagged.
+                System.out.println("Failed to reach home base");
             }
             break;
+
             case Idle:
             case Voted:
             case Seeker:
@@ -412,6 +449,17 @@ public class Context {
         otherPlayers.forEach(p -> {
             GRPCHandle handle = otherPlayersGRPCHandles.get(p.getId());
             handle.getStub().leaveRound(msg, new GRPCObserverLeaveRoundResponse());
+        });
+    }
+
+    private void sendRoundEndToAllPlayers() {
+        if (state != State.Seeker) {
+            throw new IllegalStateException("Announcing end of round while not being the seeker");
+        }
+
+        otherPlayers.forEach(p -> {
+            GRPCHandle handle = otherPlayersGRPCHandles.get(p.getId());
+            handle.getStub().endRound(Empty.getDefaultInstance(), new GRPCObserverRoundEndResponse());
         });
     }
 

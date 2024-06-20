@@ -58,6 +58,8 @@ watchout/MQTTConfig.java
  watchout.MQTTConfig
 watchout/common/HeartbeatStatResult.java
  watchout.common.HeartbeatStatResult
+watchout/player/GRPCObserverRoundEndResponse.java
+ watchout.player.GRPCObserverRoundEndResponse
 watchout/player/GRPCObserverElectionResponse.java
  watchout.player.GRPCObserverElectionResponse
 watchout/admin/Heartbeats.java

@@ -213,6 +213,37 @@ public final class PlayerPeerServiceGrpc {
     return getLeaveRoundMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.Empty,
+      watchout.player.PlayerPeerServiceOuterClass.Empty> getEndRoundMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "endRound",
+      requestType = watchout.player.PlayerPeerServiceOuterClass.Empty.class,
+      responseType = watchout.player.PlayerPeerServiceOuterClass.Empty.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.Empty,
+      watchout.player.PlayerPeerServiceOuterClass.Empty> getEndRoundMethod() {
+    io.grpc.MethodDescriptor<watchout.player.PlayerPeerServiceOuterClass.Empty, watchout.player.PlayerPeerServiceOuterClass.Empty> getEndRoundMethod;
+    if ((getEndRoundMethod = PlayerPeerServiceGrpc.getEndRoundMethod) == null) {
+      synchronized (PlayerPeerServiceGrpc.class) {
+        if ((getEndRoundMethod = PlayerPeerServiceGrpc.getEndRoundMethod) == null) {
+          PlayerPeerServiceGrpc.getEndRoundMethod = getEndRoundMethod =
+              io.grpc.MethodDescriptor.<watchout.player.PlayerPeerServiceOuterClass.Empty, watchout.player.PlayerPeerServiceOuterClass.Empty>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "endRound"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  watchout.player.PlayerPeerServiceOuterClass.Empty.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  watchout.player.PlayerPeerServiceOuterClass.Empty.getDefaultInstance()))
+              .setSchemaDescriptor(new PlayerPeerServiceMethodDescriptorSupplier("endRound"))
+              .build();
+        }
+      }
+    }
+    return getEndRoundMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -282,6 +313,13 @@ public final class PlayerPeerServiceGrpc {
       asyncUnimplementedUnaryCall(getLeaveRoundMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void endRound(watchout.player.PlayerPeerServiceOuterClass.Empty request,
+        io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty> responseObserver) {
+      asyncUnimplementedUnaryCall(getEndRoundMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -326,6 +364,13 @@ public final class PlayerPeerServiceGrpc {
                 watchout.player.PlayerPeerServiceOuterClass.LeaveRoundMessage,
                 watchout.player.PlayerPeerServiceOuterClass.Empty>(
                   this, METHODID_LEAVE_ROUND)))
+          .addMethod(
+            getEndRoundMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                watchout.player.PlayerPeerServiceOuterClass.Empty,
+                watchout.player.PlayerPeerServiceOuterClass.Empty>(
+                  this, METHODID_END_ROUND)))
           .build();
     }
   }
@@ -395,6 +440,14 @@ public final class PlayerPeerServiceGrpc {
       asyncUnaryCall(
           getChannel().newCall(getLeaveRoundMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void endRound(watchout.player.PlayerPeerServiceOuterClass.Empty request,
+        io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getEndRoundMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -455,6 +508,13 @@ public final class PlayerPeerServiceGrpc {
     public watchout.player.PlayerPeerServiceOuterClass.Empty leaveRound(watchout.player.PlayerPeerServiceOuterClass.LeaveRoundMessage request) {
       return blockingUnaryCall(
           getChannel(), getLeaveRoundMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public watchout.player.PlayerPeerServiceOuterClass.Empty endRound(watchout.player.PlayerPeerServiceOuterClass.Empty request) {
+      return blockingUnaryCall(
+          getChannel(), getEndRoundMethod(), getCallOptions(), request);
     }
   }
 
@@ -523,6 +583,14 @@ public final class PlayerPeerServiceGrpc {
       return futureUnaryCall(
           getChannel().newCall(getLeaveRoundMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<watchout.player.PlayerPeerServiceOuterClass.Empty> endRound(
+        watchout.player.PlayerPeerServiceOuterClass.Empty request) {
+      return futureUnaryCall(
+          getChannel().newCall(getEndRoundMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_GREETING = 0;
@@ -531,6 +599,7 @@ public final class PlayerPeerServiceGrpc {
   private static final int METHODID_TOKEN = 3;
   private static final int METHODID_TAG = 4;
   private static final int METHODID_LEAVE_ROUND = 5;
+  private static final int METHODID_END_ROUND = 6;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -571,6 +640,10 @@ public final class PlayerPeerServiceGrpc {
           break;
         case METHODID_LEAVE_ROUND:
           serviceImpl.leaveRound((watchout.player.PlayerPeerServiceOuterClass.LeaveRoundMessage) request,
+              (io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty>) responseObserver);
+          break;
+        case METHODID_END_ROUND:
+          serviceImpl.endRound((watchout.player.PlayerPeerServiceOuterClass.Empty) request,
               (io.grpc.stub.StreamObserver<watchout.player.PlayerPeerServiceOuterClass.Empty>) responseObserver);
           break;
         default:
@@ -640,6 +713,7 @@ public final class PlayerPeerServiceGrpc {
               .addMethod(getTokenMethod())
               .addMethod(getTagMethod())
               .addMethod(getLeaveRoundMethod())
+              .addMethod(getEndRoundMethod())
               .build();
         }
       }

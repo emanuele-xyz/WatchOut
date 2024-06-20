@@ -88,5 +88,16 @@ public class GRPCServiceImpl extends PlayerPeerServiceImplBase {
         }
     }
 
-    // TODO: endRound
+    @Override
+    public void endRound(Empty request, StreamObserver<Empty> responseObserver) {
+        io.grpc.Context newContext = io.grpc.Context.current().fork();
+        io.grpc.Context oldContext = newContext.attach();
+        try {
+            Context.getInstance().onEndRoundReceive();
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+        } finally {
+            newContext.detach(oldContext);
+        }
+    }
 }
