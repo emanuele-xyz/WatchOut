@@ -35,7 +35,6 @@ public class Context {
     private Set<Integer> taggablePlayers;
     private int currentPitchX;
     private int currentPitchY;
-    private boolean isPursuing;
 
     private Context() {
         taggablePlayers = new HashSet<>();
@@ -64,8 +63,6 @@ public class Context {
     public synchronized void setPitchStart(int x, int y) {
         this.pitchStartX = x;
         this.pitchStartY = y;
-        currentPitchX = x;
-        currentPitchY = y;
     }
 
     public synchronized void setPlayers(List<Player> registeredPlayers) {
@@ -90,9 +87,7 @@ public class Context {
         System.out.println("Greeting from player " + greeting.getId() + " - listening at " + greeting.getAddress() + ":" + greeting.getPort() + " - starting at (" + greeting.getPitchStartX() + "," + greeting.getPitchStartY() + ")");
         otherPlayers.add(new Player(greeting.getId(), greeting.getAddress(), greeting.getPort(), greeting.getPitchStartX(), greeting.getPitchStartY()));
         otherPlayersGRPCHandles.put(greeting.getId(), new GRPCHandle(greeting.getAddress(), greeting.getPort()));
-        if (isPursuing) {
-            taggablePlayers.add(greeting.getId());
-        }
+        taggablePlayers.add(greeting.getId());
     }
 
     public synchronized void onGameStartReceive() {
@@ -194,7 +189,9 @@ public class Context {
                     // NOTE: It's my own seeker message.
                     // NOTE: start token ring.
                     System.out.println("A new round has started");
-                    isPursuing = true;
+                    // NOTE: return to starting position
+                    currentPitchX = pitchStartX;
+                    currentPitchY = pitchStartY;
                     new Thread(this::seekOtherPlayers).start();
                     sendTokenToNextPlayer();
                 } else {
@@ -233,10 +230,11 @@ public class Context {
             break;
 
             case Seeker: {
-                if (isPursuing) {
+                if (!taggablePlayers.isEmpty()) {
                     forwardTokenToNextPlayer(msg);
                 } else {
-                    System.out.println("The round is over");
+                    System.out.println("Token blocked, the round is over");
+                    state = State.Idle;
                     sendRoundEndToAllPlayers();
                 }
             }
@@ -311,34 +309,29 @@ public class Context {
 
         taggablePlayers.clear();
         otherPlayers.forEach(p -> taggablePlayers.add(p.getId()));
-        while (true) {
-            Player p = findClosestTaggablePlayer();
-            if (p != null) {
-                // NOTE: pursue the closest taggable player.
-                double d = Pitch.getDistance(currentPitchX, currentPitchY, p.getPitchStartX(), p.getPitchStartY()) * Pitch.DISTANCE_TO_METERS_FACTOR;
-                double timeToReachPlayer = d / PLAYER_SPEED;
-                System.out.println("Pursuing player " + p.getId() + " reaching it in " + timeToReachPlayer + " seconds");
-                try {
-                    wait((long) timeToReachPlayer * 1000 + 1); // NOTE: +1 to avoid 0 timeout due to 0 distance.
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                currentPitchX = p.getPitchStartX();
-                currentPitchY = p.getPitchStartY();
 
-                // NOTE: after the pursuit, we check if the player is still taggable
-                if (taggablePlayers.contains(p.getId())) {
-                    // NOTE: if it is, try to tag it
-                    sendTagToPlayer(p.getId());
-                    taggablePlayers.remove(p.getId());
-                }
-            } else {
-                // NOTE: There are no more taggable players. The game has ended.
-                break;
+        while (!taggablePlayers.isEmpty()) {
+            // NOTE: pursue the closest taggable player.
+            Player p = findClosestTaggablePlayer();
+            double d = Pitch.getDistance(currentPitchX, currentPitchY, p.getPitchStartX(), p.getPitchStartY()) * Pitch.DISTANCE_TO_METERS_FACTOR;
+            double timeToReachPlayer = d / PLAYER_SPEED;
+            System.out.println("Pursuing player " + p.getId() + " reaching it in " + timeToReachPlayer + " seconds");
+            try {
+                wait((long) timeToReachPlayer * 1000 + 1); // NOTE: +1 to avoid 0 timeout due to 0 distance.
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            currentPitchX = p.getPitchStartX();
+            currentPitchY = p.getPitchStartY();
+
+            // NOTE: after the pursuit, check if the player is still taggable.
+            if (taggablePlayers.contains(p.getId())) {
+                // NOTE: if it is, try to tag it
+                sendTagToPlayer(p.getId());
+                taggablePlayers.remove(p.getId());
             }
         }
 
-        isPursuing = false;
         System.out.println("Pursuit ended");
     }
 
@@ -457,6 +450,7 @@ public class Context {
             throw new IllegalStateException("Announcing end of round while not being the seeker");
         }
 
+        System.out.println("Announcing end of round to all other players");
         otherPlayers.forEach(p -> {
             GRPCHandle handle = otherPlayersGRPCHandles.get(p.getId());
             handle.getStub().endRound(Empty.getDefaultInstance(), new GRPCObserverRoundEndResponse());
