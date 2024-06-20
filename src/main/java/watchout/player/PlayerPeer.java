@@ -141,6 +141,7 @@ public class PlayerPeer {
         if (!isInitializationSuccessful) return;
         boolean isPlayerAdminServerRegistrationSuccessful = handlePlayerAdminServerRegistration();
         if (!isPlayerAdminServerRegistrationSuccessful) return;
+        // TODO: start heartbeats collection and submission thread
         createAndStartPlayerPeerServiceGRPCServer();
         Context.getInstance().createGRPCHandles();
         Context.getInstance().greetAllPlayers();
