@@ -31,7 +31,7 @@ public class Heartbeats {
         }
     }
 
-    public void addHeartbeats(int id, int timestamp, HeartbeatList heartbeatList) {
+    public void addHeartbeats(int id, long timestamp, HeartbeatList heartbeatList) {
         synchronized (heartbeats) {
             for (watchout.common.Heartbeat heartbeat : heartbeatList.getHeartbeats()) {
                 heartbeats.add(new Heartbeat(id, heartbeat.getHeartbeat(), heartbeat.getTimestamp()));
@@ -61,7 +61,7 @@ public class Heartbeats {
         return lastNHeartbeats.stream().mapToDouble(Heartbeat::getHeartbeat).average().orElse(0.0);
     }
 
-    public double getAverageOfHeartbeatsBetween(int t1, int t2) {
+    public double getAverageOfHeartbeatsBetween(long t1, long t2) {
         List<Heartbeat> heartbeatsBetween = new ArrayList<>();
         synchronized (heartbeats) {
             for (Heartbeat heartbeat : heartbeats) {

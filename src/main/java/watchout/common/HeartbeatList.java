@@ -7,13 +7,13 @@ import java.util.List;
 @XmlRootElement
 public class HeartbeatList {
     private List<Heartbeat> heartbeats;
-    private int timestamp;
+    private long timestamp;
 
     public HeartbeatList() {
         this(new ArrayList<>(), 0);
     }
 
-    public HeartbeatList(List<Heartbeat> heartbeats, int timestamp) {
+    public HeartbeatList(List<Heartbeat> heartbeats, long timestamp) {
         this.heartbeats = heartbeats;
         this.timestamp = timestamp;
     }
@@ -26,11 +26,11 @@ public class HeartbeatList {
         this.heartbeats = heartbeats;
     }
 
-    public int getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(int timestamp) {
+    public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 }

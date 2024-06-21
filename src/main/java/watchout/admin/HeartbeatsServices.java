@@ -9,17 +9,10 @@ import javax.ws.rs.core.Response;
 @Path("heartbeats")
 public class HeartbeatsServices {
 
-    // NOTE: only for testing purposes
-    @GET
-    public Response printHeartbeats() {
-        Heartbeats.getInstance().printHeartbeats();
-        return Response.ok().build();
-    }
-
     @Path("/{id}/{timestamp}")
     @POST
     @Consumes({"application/json", "application/xml"})
-    public Response addHeartbeats(@PathParam("id") int id, @PathParam("timestamp") int timestamp, HeartbeatList heartbeatList) {
+    public Response addHeartbeats(@PathParam("id") int id, @PathParam("timestamp") long timestamp, HeartbeatList heartbeatList) {
         if (!Players.getInstance().isPlayerRegistered(id)) return Response.status(Response.Status.NOT_FOUND).build();
 
         Heartbeats.getInstance().addHeartbeats(id, timestamp, heartbeatList);
@@ -39,7 +32,7 @@ public class HeartbeatsServices {
 
     @Path("/avgbetween/{t1}/{t2}")
     @GET
-    public Response getAverageOfHeartbeatsBetween(@PathParam("t1") int t1, @PathParam("t2") int t2) {
+    public Response getAverageOfHeartbeatsBetween(@PathParam("t1") long t1, @PathParam("t2") long t2) {
         if (t1 > t2) return Response.status(Response.Status.BAD_REQUEST).build();
 
         double avg = Heartbeats.getInstance().getAverageOfHeartbeatsBetween(t1, t2);

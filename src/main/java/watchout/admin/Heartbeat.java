@@ -2,10 +2,10 @@ package watchout.admin;
 
 public class Heartbeat {
     private final int playerId;
-    private final int heartbeat;
-    private final int timestamp;
+    private final double heartbeat;
+    private final long timestamp;
 
-    public Heartbeat(int playerId, int heartbeat, int timestamp) {
+    public Heartbeat(int playerId, double heartbeat, long timestamp) {
         this.playerId = playerId;
         this.heartbeat = heartbeat;
         this.timestamp = timestamp;
@@ -15,11 +15,11 @@ public class Heartbeat {
         return playerId;
     }
 
-    public int getHeartbeat() {
+    public double getHeartbeat() {
         return heartbeat;
     }
 
-    public int getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 

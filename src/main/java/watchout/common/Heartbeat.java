@@ -4,29 +4,29 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Heartbeat {
-    private int heartbeat;
-    private int timestamp;
+    private double heartbeat;
+    private long timestamp;
 
     public Heartbeat() {}
 
-    public Heartbeat(int heartbeat, int timestamp) {
+    public Heartbeat(double heartbeat, long timestamp) {
         this.heartbeat = heartbeat;
         this.timestamp = timestamp;
     }
 
-    public int getHeartbeat() {
+    public double getHeartbeat() {
         return heartbeat;
     }
 
-    public void setHeartbeat(int heartbeat) {
+    public void setHeartbeat(double heartbeat) {
         this.heartbeat = heartbeat;
     }
 
-    public int getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(int timestamp) {
+    public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 }

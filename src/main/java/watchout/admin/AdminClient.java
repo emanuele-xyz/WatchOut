@@ -71,6 +71,7 @@ public class AdminClient {
             String id = keyboard.readLine();
             System.out.print("N > ");
             String n = keyboard.readLine();
+            // TODO: what if id and n are not numbers?
 
             WebResource webResource = restClient.resource(HEARTBEATS_ENDPOINT + "/avgoflastn/" + id + "/" + n);
             ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
@@ -93,6 +94,7 @@ public class AdminClient {
             String t0 = keyboard.readLine();
             System.out.print("t1 > ");
             String t1 = keyboard.readLine();
+            // TODO: what if inserted timestamps are not numbers?
 
             WebResource webResource = restClient.resource(HEARTBEATS_ENDPOINT + "/avgbetween/" + t0 + "/" + t1);
             ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
