@@ -145,7 +145,7 @@ public class PlayerPeer {
         if (!isPlayerAdminServerRegistrationSuccessful) return;
         hrBuffer =  new HRBuffer();
         new HRSimulator(hrBuffer).start();
-        new HRSender().start();
+        new HRSender(hrBuffer).start();
         createAndStartPlayerPeerServiceGRPCServer();
         Context.getInstance().createGRPCHandles();
         Context.getInstance().greetAllPlayers();
