@@ -85,7 +85,7 @@ public class Context {
                 .build();
         otherPlayers.forEach(p -> {
             GRPCHandle handle = otherPlayersGRPCHandles.get(p.getId());
-            handle.getStub().greeting(request, new GRPCObserverGreetingResponse(p.getId(), p.getAddress(), p.getPort()));
+            handle.getStub().greeting(request, new GRPCDefaultResponseObserver("Failed to send greeting to player " + p.getId()));
         });
     }
 
@@ -401,14 +401,14 @@ public class Context {
         System.out.println("Sending election to player " + nextPlayerId);
         GRPCHandle handle = otherPlayersGRPCHandles.get(nextPlayerId);
         ElectionMessage msg = ElectionMessage.newBuilder().setId(id).setPitchStartX(pitchStartX).setPitchStartY(pitchStartY).build();
-        handle.getStub().election(msg, new GRPCObserverElectionResponse());
+        handle.getStub().election(msg, new GRPCDefaultResponseObserver("Failed to send election to player " + nextPlayerId));
     }
 
     private void forwardElectionToNextPlayer(ElectionMessage msg) {
         int nextPlayerId = findNextPlayerId();
         System.out.println("Forwarding election to player " + nextPlayerId);
         GRPCHandle handle = otherPlayersGRPCHandles.get(nextPlayerId);
-        handle.getStub().election(msg, new GRPCObserverElectionResponse());
+        handle.getStub().election(msg, new GRPCDefaultResponseObserver("Failed to forward election to player " + nextPlayerId));
     }
 
     private void sendSeekerToNextPlayer() {
@@ -416,14 +416,14 @@ public class Context {
         System.out.println("Sending seeker announcement to player " + nextPlayerId);
         GRPCHandle handle = otherPlayersGRPCHandles.get(nextPlayerId);
         SeekerMessage msg = SeekerMessage.newBuilder().setId(id).build();
-        handle.getStub().seeker(msg, new GRPCObserverSeekerResponse());
+        handle.getStub().seeker(msg, new GRPCDefaultResponseObserver("Failed to send seeker announcement to player " + nextPlayerId));
     }
 
     private void forwardSeekerToNextPlayer(SeekerMessage msg) {
         int nextPlayerId = findNextPlayerId();
         System.out.println("Forwarding seeker to player " + nextPlayerId);
         GRPCHandle handle = otherPlayersGRPCHandles.get(nextPlayerId);
-        handle.getStub().seeker(msg, new GRPCObserverSeekerResponse());
+        handle.getStub().seeker(msg, new GRPCDefaultResponseObserver("Failed to forward seeker announcement to player " + nextPlayerId));
     }
 
     private void sendTokenToNextPlayer() {
@@ -431,20 +431,20 @@ public class Context {
         System.out.println("Sending token to player " + nextPlayerId);
         GRPCHandle handle = otherPlayersGRPCHandles.get(nextPlayerId);
         TokenMessage msg = TokenMessage.newBuilder().setSeekerId(id).build();
-        handle.getStub().token(msg, new GRPCObserverTokenResponse());
+        handle.getStub().token(msg, new GRPCDefaultResponseObserver("Failed to send token to player " + nextPlayerId));
     }
 
     private void forwardTokenToNextPlayer(TokenMessage msg) {
         int nextPlayerId = findNextPlayerId();
         System.out.println("Forwarding token to player " + nextPlayerId);
         GRPCHandle handle = otherPlayersGRPCHandles.get(nextPlayerId);
-        handle.getStub().token(msg, new GRPCObserverTokenResponse());
+        handle.getStub().token(msg, new GRPCDefaultResponseObserver("Failed to forward token to player " + nextPlayerId));
     }
 
     private void sendTagToPlayer(int id) {
         System.out.println("Sending tag to player " + id);
         GRPCHandle handle = otherPlayersGRPCHandles.get(id);
-        handle.getStub().tag(Empty.getDefaultInstance(), new GRPCObserverTagResponse());
+        handle.getStub().tag(Empty.getDefaultInstance(), new GRPCDefaultResponseObserver("Failed to send tag to player " + id));
     }
 
     private void sendRoundLeave() {
@@ -457,7 +457,7 @@ public class Context {
                 .build();
         otherPlayers.forEach(p -> {
             GRPCHandle handle = otherPlayersGRPCHandles.get(p.getId());
-            handle.getStub().leaveRound(msg, new GRPCObserverLeaveRoundResponse());
+            handle.getStub().leaveRound(msg, new GRPCDefaultResponseObserver("Failed to signal round leave to player " + p.getId()));
         });
     }
 
@@ -465,7 +465,7 @@ public class Context {
         System.out.println("Announcing end of round to all other players");
         otherPlayers.forEach(p -> {
             GRPCHandle handle = otherPlayersGRPCHandles.get(p.getId());
-            handle.getStub().endRound(Empty.getDefaultInstance(), new GRPCObserverRoundEndResponse());
+            handle.getStub().endRound(Empty.getDefaultInstance(), new GRPCDefaultResponseObserver("Failed to send end of round to player " + p.getId()));
         });
     }
 
