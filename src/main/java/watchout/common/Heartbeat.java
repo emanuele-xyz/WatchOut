@@ -29,4 +29,9 @@ public class Heartbeat {
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
+
+    @Override
+    public String toString() {
+        return String.format("{ heartbeat: %.2f, timestamp: %d }", heartbeat, timestamp);
+    }
 }

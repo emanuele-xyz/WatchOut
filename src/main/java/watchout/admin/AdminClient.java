@@ -81,6 +81,7 @@ public class AdminClient {
                 System.out.println("Something went wrong ... " + statusStr + "(" + statusCode + ")");
             } else {
                 HeartbeatStatResult result = response.getEntity(HeartbeatStatResult.class);
+                // TODO: limit number of digits while printing floats
                 System.out.println("The average of the last " + n + " heartbeats coming from player " + id + " is " + result.getResult());
             }
         } catch (ClientHandlerException e) {
