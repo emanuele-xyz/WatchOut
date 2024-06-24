@@ -54,8 +54,6 @@ watchout/common/PlayerList.java
  watchout.common.PlayerList
 watchout/player/GRPCDefaultResponseObserver.java
  watchout.player.GRPCDefaultResponseObserver
-watchout/MQTTConfig.java
- watchout.MQTTConfig
 watchout/simulators/Simulator.java
  watchout.simulators.Simulator
 watchout/common/HeartbeatStatResult.java
@@ -71,12 +69,12 @@ watchout/admin/Player.java
  watchout.admin.Player
 watchout/simulators/HRSimulator.java
  watchout.simulators.HRSimulator
+watchout/utils/Pitch.java
+ watchout.utils.Pitch
 watchout/admin/AdminServer.java
  watchout.admin.AdminServer
 watchout/simulators/Measurement.java
  watchout.simulators.Measurement
-watchout/Pitch.java
- watchout.Pitch
 watchout/admin/Players.java
  watchout.admin.Players
 watchout/admin/Heartbeat.java
@@ -85,6 +83,8 @@ watchout/common/HeartbeatList.java
  watchout.common.HeartbeatList
 watchout/common/Heartbeat.java
  watchout.common.Heartbeat
+watchout/utils/MQTTConfig.java
+ watchout.utils.MQTTConfig
 watchout/common/Player.java
  watchout.common.Player
 watchout/player/PlayerPeer.java

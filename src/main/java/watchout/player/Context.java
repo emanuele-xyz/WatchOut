@@ -101,10 +101,14 @@ public class Context {
 
         switch (state) {
             case Idle: {
-                if (mayBeSeeker()) {
-                    System.out.println("I may be the seeker. Election started!");
-                    state = State.Voted;
-                    sendElectionToNextPlayer();
+                if (!otherPlayers.isEmpty()) {
+                    if (mayBeSeeker()) {
+                        System.out.println("I may be the seeker. Election started!");
+                        state = State.Voted;
+                        sendElectionToNextPlayer();
+                    }
+                } else {
+                    System.out.println("I don't know any other player!");
                 }
             }
             break;
