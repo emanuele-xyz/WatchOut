@@ -1,4 +1,4 @@
-package watchout;
+package watchout.utils;
 
 public class MQTTConfig {
     public static final String BROKER_ADDRESS = "tcp://localhost:1883";

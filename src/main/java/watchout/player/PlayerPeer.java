@@ -7,7 +7,7 @@ import com.sun.jersey.api.client.WebResource;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import org.eclipse.paho.client.mqttv3.*;
-import watchout.MQTTConfig;
+import watchout.utils.MQTTConfig;
 import watchout.common.Player;
 import watchout.common.PlayerList;
 import watchout.simulators.HRSimulator;

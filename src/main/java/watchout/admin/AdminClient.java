@@ -8,7 +8,7 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import watchout.MQTTConfig;
+import watchout.utils.MQTTConfig;
 import watchout.common.HeartbeatStatResult;
 import watchout.common.PlayerList;
 

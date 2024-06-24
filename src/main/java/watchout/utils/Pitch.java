@@ -1,4 +1,4 @@
-package watchout;
+package watchout.utils;
 
 import java.util.Arrays;
 

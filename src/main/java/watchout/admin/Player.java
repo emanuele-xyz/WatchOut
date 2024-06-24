@@ -1,6 +1,6 @@
 package watchout.admin;
 
-import watchout.Pitch;
+import watchout.utils.Pitch;
 
 public class Player {
     private final int id;

@@ -1,6 +1,6 @@
 package watchout.player;
 
-import watchout.Pitch;
+import watchout.utils.Pitch;
 import watchout.common.Player;
 
 import java.util.*;
