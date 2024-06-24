@@ -31,7 +31,7 @@ public class Context {
     private int pitchStartY;
     private List<Player> otherPlayers;
     private Map<Integer, GRPCHandle> otherPlayersGRPCHandles;
-    private int seekerId; // TODO: may be removed
+    private int seekerId; // TODO: not needed
     private final Set<Integer> taggablePlayers;
     private int currentPitchX;
     private int currentPitchY;

@@ -156,6 +156,6 @@ public class PlayerPeer {
         boolean isSubscribedSuccessfully = subscribeToMQTTTopics();
         if (!isSubscribedSuccessfully) return;
 
-        gRPCServer.awaitTermination(); // TODO: when do we call server.awaitTermination()?
+        gRPCServer.awaitTermination();
     }
 }

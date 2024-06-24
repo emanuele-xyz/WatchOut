@@ -71,21 +71,22 @@ public class AdminClient {
             String id = keyboard.readLine();
             System.out.print("N > ");
             String n = keyboard.readLine();
-            // TODO: what if id and n are not numbers?
 
-            WebResource webResource = restClient.resource(HEARTBEATS_ENDPOINT + "/avgoflastn/" + id + "/" + n);
+            String url = HEARTBEATS_ENDPOINT + "/avgoflastn/" + id + "/" + n;
+            WebResource webResource = restClient.resource(url);
             ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
             if (response.getStatus() != Response.Status.OK.getStatusCode()) {
                 int statusCode = response.getStatus();
                 String statusStr = Response.Status.fromStatusCode(statusCode).toString();
-                System.out.println("Something went wrong ... " + statusStr + "(" + statusCode + ")");
+                System.out.println("Something went wrong requesting " + url + " ... " + statusStr + "(" + statusCode + ")");
             } else {
                 HeartbeatStatResult result = response.getEntity(HeartbeatStatResult.class);
-                // TODO: limit number of digits while printing floats
-                System.out.println("The average of the last " + n + " heartbeats coming from player " + id + " is " + result.getResult());
+                System.out.printf("The average of the last %s heartbeats coming from player %s is %.2f\n", n, id, result.getResult());
             }
         } catch (ClientHandlerException e) {
             System.out.println("Server not available");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid parameter: " + e.getMessage());
         }
     }
 
@@ -95,20 +96,22 @@ public class AdminClient {
             String t0 = keyboard.readLine();
             System.out.print("t1 > ");
             String t1 = keyboard.readLine();
-            // TODO: what if inserted timestamps are not numbers?
 
-            WebResource webResource = restClient.resource(HEARTBEATS_ENDPOINT + "/avgbetween/" + t0 + "/" + t1);
+            String url = HEARTBEATS_ENDPOINT + "/avgbetween/" + t0 + "/" + t1;
+            WebResource webResource = restClient.resource(url);
             ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
             if (response.getStatus() != Response.Status.OK.getStatusCode()) {
                 int statusCode = response.getStatus();
                 String statusStr = Response.Status.fromStatusCode(statusCode).toString();
-                System.out.println("Something went wrong ... " + statusStr + "(" + statusCode + ")");
+                System.out.println("Something went wrong requesting " + url + " ... " + statusStr + "(" + statusCode + ")");
             } else {
                 HeartbeatStatResult result = response.getEntity(HeartbeatStatResult.class);
                 System.out.println("The average of the all the heartbeats between " + t0 + " and " + t1 + " is " + result.getResult());
             }
         } catch (ClientHandlerException e) {
             System.out.println("Server not available");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid parameter: " + e.getMessage());
         }
     }
 
