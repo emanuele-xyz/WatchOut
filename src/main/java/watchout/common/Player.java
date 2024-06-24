@@ -72,8 +72,7 @@ public class Player {
     public String toString() {
         return "Player {" +
                 "id=" + id +
-                ", address='" + address + ':' +
-                ", port=" + port +
+                ", address='" + address + ':' + port + "'" +
                 ", startX=" + pitchStartX +
                 ", startY=" + pitchStartY +
                 '}';

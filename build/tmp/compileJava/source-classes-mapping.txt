@@ -9,12 +9,12 @@ watchout/player/PlayerPeerServiceGrpc.java
  watchout.player.PlayerPeerServiceGrpc$PlayerPeerServiceImplBase
  watchout.player.PlayerPeerServiceGrpc$PlayerPeerServiceMethodDescriptorSupplier
  watchout.player.PlayerPeerServiceGrpc$PlayerPeerServiceStub
-watchout/player/HRSender.java
- watchout.player.HRSender
+watchout/player/MQTTHandler.java
+ watchout.player.MQTTHandler
 watchout/admin/AdminClient.java
  watchout.admin.AdminClient
-watchout/player/GRPCServiceImpl.java
- watchout.player.GRPCServiceImpl
+watchout/admin/HeartbeatsServices.java
+ watchout.admin.HeartbeatsServices
 watchout/player/PlayerPeerServiceOuterClass.java
  watchout.player.PlayerPeerServiceOuterClass
  watchout.player.PlayerPeerServiceOuterClass$1
@@ -48,8 +48,8 @@ watchout/player/State.java
  watchout.player.State
 watchout/player/GRPCHandle.java
  watchout.player.GRPCHandle
-watchout/admin/PlayersServices.java
- watchout.admin.PlayersServices
+watchout/common/Player.java
+ watchout.common.Player
 watchout/common/PlayerList.java
  watchout.common.PlayerList
 watchout/player/GRPCDefaultResponseObserver.java
@@ -58,13 +58,12 @@ watchout/simulators/Simulator.java
  watchout.simulators.Simulator
 watchout/common/HeartbeatStatResult.java
  watchout.common.HeartbeatStatResult
-watchout/player/MQTTHandler.java
- watchout.player.MQTTHandler
-watchout/admin/Heartbeats.java
- watchout.admin.Heartbeats
-watchout/player/Context.java
- watchout.player.Context
- watchout.player.Context$1
+watchout/player/PlayerPeer.java
+ watchout.player.PlayerPeer
+watchout/player/GRPCServiceImpl.java
+ watchout.player.GRPCServiceImpl
+watchout/player/HRBuffer.java
+ watchout.player.HRBuffer
 watchout/admin/Player.java
  watchout.admin.Player
 watchout/simulators/HRSimulator.java
@@ -81,15 +80,16 @@ watchout/admin/Heartbeat.java
  watchout.admin.Heartbeat
 watchout/common/HeartbeatList.java
  watchout.common.HeartbeatList
-watchout/common/Heartbeat.java
- watchout.common.Heartbeat
+watchout/admin/PlayersServices.java
+ watchout.admin.PlayersServices
 watchout/utils/MQTTConfig.java
  watchout.utils.MQTTConfig
-watchout/common/Player.java
- watchout.common.Player
-watchout/player/PlayerPeer.java
- watchout.player.PlayerPeer
-watchout/admin/HeartbeatsServices.java
- watchout.admin.HeartbeatsServices
-watchout/player/HRBuffer.java
- watchout.player.HRBuffer
+watchout/player/Context.java
+ watchout.player.Context
+ watchout.player.Context$1
+watchout/player/HRSender.java
+ watchout.player.HRSender
+watchout/common/Heartbeat.java
+ watchout.common.Heartbeat
+watchout/admin/Heartbeats.java
+ watchout.admin.Heartbeats
